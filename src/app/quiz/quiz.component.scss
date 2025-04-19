@@ -1,0 +1,269 @@
+// /* quiz.component.css */
+// :host {
+//     display: block;
+//   }
+
+//   /* Add custom styles for your quiz */
+// h2 {
+//     text-align: center;
+//     color: #4CAF50;
+//   }
+  
+//   button {
+//     margin: 10px;
+//   }
+
+
+//   /* Quiz Container */
+// .quiz-container {
+//     width: 100%;
+//     max-width:1200px;
+//     margin: 0 auto;
+//     padding: 20px;
+//     background-color: white;
+//     border-radius: 8px;
+//     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+//   }
+  
+//   /* Question and Answers */
+//   .question {
+//     margin-bottom: 20px;
+//   }
+  
+//   .answer-option {
+//     display: flex;
+//     align-items: center;
+//     margin-bottom: 15px;
+//   }
+  
+//   .answer-option input[type="radio"] {
+//     margin-right: 10px;
+//   }
+//   .answer-option input[type="radio"]:hover {
+//     cursor: pointer;
+//   }
+  
+//   .answer-option label {
+//     font-size: 1.1rem;
+//     line-height: 1.6;
+//   }
+  
+//   /* Navigation Buttons */
+//   .nav-buttons {
+//     display: flex;
+//     justify-content: space-between;
+//   }
+  
+//   button.nav-btn {
+//     background-color: #007bff;
+//     color: white;
+//   }
+  
+//   button.nav-btn:hover {
+//     background-color: #0056b3;
+//   }
+  
+//   button.nav-btn:disabled {
+//     background-color: #ccc;
+//   }
+  
+//   /* Result Section */
+//   .result-container {
+//     text-align: center;
+//     margin-top: 40px;
+//   }
+  
+//   .result-container h3 {
+//     font-size: 2rem;
+//     margin-bottom: 10px;
+//   }
+  
+//   .result-container h1 {
+//     font-size: 2.5rem;
+//     margin: 20px 0;
+//   }
+  
+//   .result-container button {
+//     background-color: #28a745;
+//     color: white;
+//     font-size: 1.2rem;
+//   }
+  
+//   .result-container button:hover {
+//     background-color: #218838;
+//   }
+  
+//   /* Responsive Design */
+//   @media (max-width: 768px) {
+//     .quiz-container {
+//       padding: 10px;
+//     }
+  
+//     h2 {
+//       font-size: 2rem;
+//     }
+  
+//     h3 {
+//       font-size: 1.2rem;
+//     }
+  
+//     .answer-option label {
+//       font-size: 1rem;
+//     }
+  
+//     button {
+//       width: 100%;
+//       padding: 12px;
+//     }
+  
+//     .nav-buttons {
+//       flex-direction: column;
+//       align-items: center;
+//     }
+  
+//     button.nav-btn {
+//       width: 100%;
+//       margin-top: 10px;
+//     }
+//   }
+  
+  
+
+/* mcq-test.component.css */
+
+/* General Styles */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7fc;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Quiz Container */
+.quiz-container {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 50px;
+  width: 100%;
+  max-width: 1100px;
+  height: 600px;
+  text-align: center;
+}
+
+/* Quiz Title */
+.quiz-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Question Section */
+.question-box {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.question-box h3 {
+  font-size: 1.5rem;
+  color: #444;
+}
+
+/* Answer Section with Scroll */
+.answers {
+  height:700px;
+  max-height: 300px; /* Adjust height as needed */
+  overflow-y: auto;  /* Enables vertical scrolling */
+  padding-right: 15px; /* Adds some padding for the scrollbar */
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Answer Options */
+.answer-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.answer-label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+input[type="radio"] {
+  margin-right: 10px;
+}
+
+.answer-label span {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Navigation Buttons */
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 100px;
+}
+
+.nav-btn, .submit-btn, .play-again-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.nav-btn:disabled, .submit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Result Section */
+.result-container {
+  padding: 20px;
+}
+
+.congratulations {
+  color: green;
+}
+
+.better-luck {
+  color: red;
+}
+
+.play-again-btn {
+  margin-top: 20px;
+  background-color: #28a745;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .quiz-container {
+      padding: 15px;
+  }
+
+  .question-box h3 {
+      font-size: 1.2rem;
+  }
+
+  .answer-label span {
+      font-size: 0.9rem;
+  }
+
+  .nav-btn, .submit-btn, .play-again-btn {
+      font-size: 0.9rem;
+  }
+}
+

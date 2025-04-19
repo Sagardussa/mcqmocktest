@@ -1,1 +1,140 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Global Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fc;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Quiz Title */
+  .quiz-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-top: 20px;
+    color: #333;
+  }
+  
+  /* Quiz Container */
+  .quiz-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  /* Question Container */
+  .question-container {
+    margin-bottom: 30px;
+  }
+  
+  .question-container h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 15px;
+  }
+  
+  /* Answer Options */
+  .answer-option {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .answer-option label {
+    font-size: 1.1rem;
+    color: #555;
+  }
+  
+  .answer-option input[type="radio"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+  }
+  
+  /* Navigation Buttons */
+  .navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .nav-btn,
+  .submit-btn {
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .nav-btn:hover,
+  .submit-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .nav-btn:disabled,
+  .submit-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* Result Container */
+  .result-container {
+    text-align: center;
+    margin-top: 40px;
+  }
+  
+  .result-container h3 {
+    font-size: 2rem;
+    color: #333;
+  }
+  
+  .result-container h1 {
+    font-size: 2.5rem;
+    margin: 20px 0;
+    color: #28a745;
+  }
+  
+  .result-container h1:not(:last-child) {
+    color: #dc3545;
+  }
+  
+  .play-again-btn {
+    background-color: #28a745;
+    color: white;
+    font-size: 1.2rem;
+    padding: 12px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .play-again-btn:hover {
+    background-color: #218838;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .quiz-container {
+      padding: 10px;
+    }
+  
+    .navigation-buttons {
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .nav-btn,
+    .submit-btn {
+      width: 100%;
+    }
+  
+    .play-again-btn {
+      width: 100%;
+    }
+  }
+  
