@@ -1,0 +1,96 @@
+<div class="modal-header">
+    <h5 class="modal-title mt-0">BOM Item Details</h5>
+    <div class="row">
+        <button type="button" class="btn btn-warning mr-2" (click)="exportToExcel()">
+            <ng-container *ngIf="isExportBtnLoading">
+                <span class="indicator-progress" [style.display]="'block'">
+                    <span class="spinner-border spinner-border-sm align-middle mr-2"></span>
+                </span>
+            </ng-container>
+            <ng-container *ngIf="!isExportBtnLoading">
+                <i class="ri-file-download-line align-middle"></i>
+            </ng-container>
+        </button>
+        <button type="button" *ngIf="!isDataLoading" class="btn btn-info mr-2" (click)="onEdit()">
+            <i class="fas fas fa-pencil-alt align-middle"></i>
+        </button>
+        <button type="button" class="btn btn-light mr-2" aria-label="Close" (click)="cancelDialog()">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="alert alert-primary" role="alert" *ngIf="isDataLoading">
+        <strong>Loading...</strong>
+        <div class="spinner-border text-success" role="status"></div>
+    </div>
+    <div class="row mb-2" *ngIf="recordData">
+        <div class="col-md-3">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered mb-0">
+                    <tbody class="fonts_size_18">
+                        <tr>
+                            <th scope="row">Item Code</th>
+                            <td><small>{{recordData.item_CodeTxt}}</small></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Item Name</th>
+                            <td><small>{{recordData.name}}</small></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered mb-0">
+                    <tbody class="fonts_size_18">
+                        <tr>
+                            <th scope="row">Category</th>
+                            <td><small>{{recordData.category}}</small></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Sizes</th>
+                            <td><small>{{recordData.sizes}}</small></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered mb-0">
+                    <tbody class="fonts_size_18">
+                        <tr>
+                            <th scope="row">Type</th>
+                            <td><small>{{recordData.type}}</small></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Brand</th>
+                            <td><small>{{recordData.brand}}</small></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered mb-0">
+                    <tbody class="fonts_size_18">
+                        <tr>
+                            <th scope="row">Group</th>
+                            <td><small>{{recordData.itemGroup}}</small></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">BOM Name</th>
+                            <td><small>{{recordData.bomData.name}}</small></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <ag-grid-angular [suppressColumnVirtualisation]="true" [domLayout]="domLayout" class="ag-theme-alpine" [rowData]="bomItemList" [columnDefs]="columnDefs"
+        (gridReady)="onGridReady($event)" [animateRows]="true">
+    </ag-grid-angular>
+</div>

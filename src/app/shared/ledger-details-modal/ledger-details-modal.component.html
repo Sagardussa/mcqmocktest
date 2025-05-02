@@ -1,0 +1,213 @@
+<div class="modal-header">
+    <h5 class="modal-title mt-0">Ledger Info</h5>
+    <div class="row">
+        <button type="button" *ngIf="!isDataLoading" class="btn btn-info mr-2" (click)="onEdit()">
+            <i class="fas fas fa-pencil-alt align-middle"></i>
+        </button>
+        <button type="button" class="btn btn-light mr-2" aria-label="Close" (click)="passBack()">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="alert alert-primary" role="alert" *ngIf="isDataLoading">
+        <strong>Loading...</strong>
+        <div class="spinner-border text-success" role="status" style="position:absolute; top: 6px; right:10px;">
+        </div>
+    </div>
+    <div class="container-fluid" *ngIf="!isDataLoading">
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th><b>Name :-</b> {{recordData.name}}
+                                <div *ngIf="recordData.lock_Freeze" class="badge font-size-12 badge-soft-danger">Ledger
+                                    is lock</div>
+                            </th>
+                            <th><b>Group :-</b> {{recordData.groupText}}</th>
+                            <th><b>Party Code :-</b> {{recordData.partyCode}}</th>
+                            <!-- <th *ngIf="isSundryDebtorChild || isSundryCreditorChild"><b>Parent Company :-</b>
+                                {{recordData.isProject ? 'Yes' : 'No'}}</th>
+                            <th *ngIf="recordData.isProject"><b>Parent :-</b> {{recordData.parantLedgerText}}
+                            </th> -->
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="billWise">
+            <hr>
+            <div class="col-sm-6">
+                <h4 class="card-title text-center mt-3 fonts_size_18">Primary Address Details</h4>
+                <hr>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered mb-0">
+                        <tbody class="fonts_size_18">
+                            <tr>
+                                <th scope="row">Address</th>
+                                <td><small>{{recordData.address}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Area</th>
+                                <td><small>{{recordData.area}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">City</th>
+                                <td><small>{{recordData.city}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">state</th>
+                                <td><small>{{recordData.state}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Pincode</th>
+                                <td><small>{{recordData.pinCode}}</small></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <h4 class="card-title text-center mt-3 fonts_size_18">Bank Details</h4>
+                <hr>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered mb-0">
+                        <tbody class="fonts_size_18">
+                            <tr>
+                                <th scope="row">Account Name</th>
+                                <td><small>{{recordData.accountName}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Bank Name</th>
+                                <td><small>{{recordData.bankName}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Branch Name</th>
+                                <td><small>{{recordData.bankBranch}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">IFSC</th>
+                                <td><small>{{recordData.ifsc}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Account No</th>
+                                <td><small>{{recordData.brankAccountNo}}</small></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <h4 class="card-title text-center mt-3 fonts_size_18">Contact Info</h4>
+                <hr>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered mb-0">
+                        <tbody class="fonts_size_18">
+                            <tr>
+                                <th scope="row">Phone</th>
+                                <td><small>{{recordData.phone_1}}, {{recordData.phone_2}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Mobile</th>
+                                <td><small>{{recordData.mobile}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Email</th>
+                                <td><small>{{recordData.email}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Website</th>
+                                <td><small>{{recordData.website}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Sales Person</th>
+                                <td><small>{{recordData.salesPerson}}</small></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <h4 class="card-title text-center mt-3 fonts_size_18">Other Info</h4>
+                <hr>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered mb-0">
+                        <tbody class="fonts_size_18">
+                            <tr>
+                                <th scope="row">PAN</th>
+                                <td><small>{{recordData.panNo}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">GST Category</th>
+                                <td><small>{{recordData.gstCategory}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">GSTIN</th>
+                                <td><small>{{recordData.gstNo}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">TCS Applicable</th>
+                                <td><small>{{recordData.isTcsApplicable ? 'Yes' : 'No'}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Note</th>
+                                <td><small>{{recordData.note}}</small></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>                  
+        </div>
+
+        <div class="row" *ngIf="isBank">
+            <div class="col-sm-6">
+                <h4 class="card-title text-center mt-3 fonts_size_18">Bank Details</h4>
+                <hr>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered mb-0">
+                        <tbody class="fonts_size_18">
+                            <tr>
+                                <th scope="row">Account Name</th>
+                                <td><small>{{recordData.accountName}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Bank Name</th>
+                                <td><small>{{recordData.bankName}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Branch Name</th>
+                                <td><small>{{recordData.bankBranch}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">IFSC</th>
+                                <td><small>{{recordData.ifsc}}</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Account No</th>
+                                <td><small>{{recordData.brankAccountNo}}</small></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+        <div class="table-responsive mt-3">
+            <table class="table table-sm table-bordered mb-0">
+                <thead>
+                    <tr>
+                        <th><b>Opening Bal :-</b> {{recordData.opening_Bal}}</th>
+                        <th><b>Opening CrDr :-</b> {{recordData.isCr ? 'Cr' : 'Dr'}}</th>
+                        <th><b>Opening Date :-</b> {{recordData.opening_Date | date: 'dd/MM/yyyy'}}</th>
+                        <th><b>Credit Limit :-</b> {{recordData.credit_Limit | localPrecisionNumber :
+                            precision | async}}</th>
+                        <th><b>Credit Days :-</b> {{recordData.creditDays}}</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>

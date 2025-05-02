@@ -1,0 +1,169 @@
+.product-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 4px;
+}
+
+.product-card-rate {
+  font-size: 10px !important;
+  margin-top: auto;
+  /* Push rate to the bottom */
+  text-align: center;
+  padding-top: 8px;
+}
+// .product-card {
+//   flex: 1 1 calc(25% - 20px);
+//   max-width: 200px;
+//   padding: 10px;
+//   border: 1px solid #81c34d;
+//   border-radius: 8px;
+//   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+//   cursor: pointer;
+//   text-align: center;
+//   background-color: #f8f9fa;
+//   transition: transform 0.2s ease-in-out;
+// }
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  /* Stack elements vertically */
+  justify-content: space-between;
+  /* Push content to top & bottom */
+  flex: 1 1 calc(25% - 20px);
+  max-width: 200px;
+  border-radius: 8px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  padding: 10px;
+}
+.product-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  //background-color: rgba(255, 255, 255, 0.6);
+  /* Light overlay */
+  z-index: 1;
+  /* Ensure the overlay is above the background */
+}
+
+.product-card-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 1px;
+  color: #333;
+}
+
+.product-card:hover {
+  background-color: #e2e6ea;
+  transform: scale(1.05);
+}
+
+.product-card-content h6 {
+  font-size: 12px;
+  font-weight: bold;
+  margin: 0;
+  max-height: 3.6em;
+  /* Approx. 3 lines of text (line height x 3) */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  /* Limit to 3 lines */
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  /* Break long words */
+  line-height: 1.2em;
+  /* Adjust line height for consistent spacing */
+}
+
+@media (max-width: 768px) {
+  .product-card {
+    flex: 1 1 calc(50% - 20px);
+  }
+}
+
+@media (max-width: 576px) {
+  .product-card {
+    flex: 1 1 calc(100% - 20px);
+  }
+}
+
+@media (max-width: 768px) {
+  .product-card {
+    flex: 1 1 calc(50% - 20px);
+    /* 2 cards per row on tablets */
+  }
+}
+
+@media (max-width: 576px) {
+  .product-card {
+    flex: 1 1 calc(100% - 20px);
+    /* 1 card per row on small screens */
+  }
+}
+
+.category-scroll,
+.brand-scroll {
+  display: flex;
+  overflow-x: auto;
+  margin-bottom: 5px;
+}
+
+.category-scroll::-webkit-scrollbar,
+.brand-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.category-scroll::-webkit-scrollbar-thumb,
+.brand-scroll::-webkit-scrollbar-thumb {
+  background-color: #00afef26;
+  border-radius: 10px;
+}
+
+.filter-button {
+  margin-right: 5px;
+  background-color: #00afef;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  position: relative;
+  font-weight: bolder;
+  font-size: 15px;
+}
+
+h6.font-size-12 {
+  font-weight: bolder !important;
+}
+
+.filter-button.selected {
+  background-color: #81c34d;
+}
+
+.close-icon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: white;
+  color: red;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 20px;
+  cursor: pointer;
+}

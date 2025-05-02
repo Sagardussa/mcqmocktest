@@ -1,0 +1,141 @@
+<div class="modal-header">
+    <h5 class="modal-title mt-0">Send Email</h5>
+    <button type="button" class="close" aria-label="Close" (click)="passBack()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form [formGroup]="form" (ngSubmit)="send()" class="mb-3" autocomplete="off">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-label-group">
+                    <input type="text" class="form-control" formControlName="from" placeholder="from" required />
+                    <label>From<span class="text-danger">*</span></label>
+                    <div class="invalid-feedback">
+                        <span>This value is required.</span>
+                    </div>
+                    <!-- <span *ngIf="form.get('form')?.hasError('email')">
+                        invalid Email
+                    </span> -->
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-label-group">
+                    <input type="text" class="form-control" formControlName="to" placeholder="To" required />
+                    <label>To<span class="text-danger">*</span></label>
+                    <div class="invalid-feedback">
+                        <span>This value is required.</span>
+                    </div>
+                    <!-- <span *ngIf="form.get('to')?.hasError('email')">
+                        invalid Email
+                    </span> -->
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-label-group">
+                    <input type="text" class="form-control" formControlName="cc" placeholder="CC"  />
+                    <label>CC</label>
+                    <div class="invalid-feedback">
+                        <span>This value is required.</span>
+                    </div>
+                    <span *ngIf="form.get('cc')?.hasError('email')">
+                        invalid Email
+                    </span>
+                </div>
+            </div>
+            <!--   <div class="col-md-12">
+                <div class="form-label-group">
+                    <input type="text" class="form-control" formControlName="bcc" placeholder="BCC" required />
+                    <label>BCC<span class="text-danger">*</span></label>
+                    <div class="invalid-feedback">
+                        <span>This value is required.</span>
+                    </div>
+                    <span *ngIf="form.get('bcc')?.hasError('email')">
+                        invalid Email
+                    </span>
+                </div>
+            </div> -->
+            <!-- <div class="col-md-6">
+                <div class="form-label-group">
+                    <input type="text" class="form-control" formControlName="attachment" placeholder="Attachment"
+                        required />
+                    <label>Attachment<span class="text-danger">*</span></label>
+                </div>
+            </div> -->
+            <div class="col-md-12">
+                <div class="form-label-group">
+                    <input type="text" class="form-control" formControlName="subject" placeholder="Subject" required />
+                    <label>Subject<span class="text-danger">*</span></label>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-label-group">
+                    <textarea rows="3" class="form-control" formControlName="message" placeholder="Message"></textarea>
+                    <label>Message<span class="text-danger">*</span></label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="custom-file">
+                    <input id="file" type="file" class="form-control" name="file" (change)="onFileChange($event)"
+                        accept=".pdf, .doc, .docx, .xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                    <div class="invalid-feedback">
+                        Please select file to upload.
+                    </div>
+                </div>
+            </div>
+
+            <table class="table table-striped mt-2">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Size</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let file of selectedFiles;let i=index">
+                        <td>{{file.name }}</td>
+                        <td>{{file.size/1024/1024|number:'.2'}} MB</td>
+
+                        <td>
+                            <a (click)="previewFile(file)" class="text-success pointer mr-2" ngbTooltip="Preview">
+                                <i class="mdi mdi-monitor-eye font-size-18"></i>
+                            </a>
+                            <a (click)="removeFile(i)" class="text-danger pointer" ngbTooltip="Delete">
+                                <i class="mdi mdi-minus-circle-outline font-size-18"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <ng-container *ngIf="isPrintBtnLoading">
+                                <span class="indicator-progress" [style.display]="'block'">
+                                    Attaching invoice please wait..
+                                    <span class="spinner-border spinner-border-sm align-middle mr-2"></span>
+                                </span>
+                            </ng-container>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-light btn-sm me-2" (click)="send()">
+        <span class="indicator-progress" [style.display]="'block'" [hidden]="!isBtnLoading">
+            <span class="spinner-border spinner-border-sm align-middle mr-2"></span>
+        </span>
+        <span class="indicator-label" [hidden]="isBtnLoading">
+            <i class="fa fa-share-square mr-2" aria-hidden="true"></i> Send
+        </span>
+    </button>
+    <button type="button" class="btn btn-secondary btn-sm" (click)="passBack()">
+        <i class="fa fa-times mr-2" aria-hidden="true"></i>Cancel
+    </button>
+</div>
+<script>
+    bsCustomFileInput.init();
+</script>

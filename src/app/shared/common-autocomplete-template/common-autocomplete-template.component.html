@@ -1,0 +1,40 @@
+<div class="row w_800" *ngIf="templateType === 'ledger'">
+    <div class="col-3 wht_spc">{{ result.name }}</div>
+    <div class="col-9">
+        <div class="row">
+            <div class="col-2 wht_spc"><small><b>{{ result.group || ' ' }}</b></small></div>
+            <ng-container *ngIf="currentCompany.businessType != 23">
+                <div class="col-5">
+                    <div class="row">
+                        <div class="col-6 wht_spc">{{ result.area || ' ' }}</div>
+                        <div class="col-6 wht_spc">{{ result.city || ' ' }}</div>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="currentCompany.businessType == 23">
+                <div class="col-5 wht_spc">{{ result.address || ' ' }}</div>
+            </ng-container>
+            <div class="col-2 wht_spc"><small><b>{{ result.mobile || ' ' }}</b></small></div>
+            <div class="col-3 wht_spc"><small><b>{{ result.gstNo || ' ' }}</b></small></div>
+        </div>
+    </div>
+</div>
+
+<div class="row w_800" *ngIf="templateType === 'item'">
+    <div class="col-3 wht_spc">{{ result.ict }}</div>
+    <div class="col-3 wht_spc">{{ result.nm || ' ' }}</div>
+    <div class="col-6">
+        <div class="row">
+            <div class="col wht_spc">{{ result.cat || ' ' }}</div>
+            <div class="col wht_spc">{{ result.siz || ' ' }}</div>
+            <div class="col wht_spc">{{ result.typ || ' ' }}</div>
+            <div class="col wht_spc">{{ result.brd || ' ' }}</div>
+            <div class="col wht_spc" *ngIf="currentCompany.taxType == 4">{{ result.hsn || ' ' }}</div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="templateType === 'name'">{{ result.name }}</div>
+
+
+<div *ngIf="templateType === 'rate'">{{ result.priceCategoryName }}</div>

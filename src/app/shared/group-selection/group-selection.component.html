@@ -1,0 +1,9 @@
+<form [formGroup]="form">
+    <ng-template #name let-r="result" let-t="term">
+        <app-common-autocomplete-template [result]="r" templateType="name"></app-common-autocomplete-template>
+    </ng-template>
+    <input type="search" class="form-control col" [ngbTypeahead]="groupSelectionFilter" [resultTemplate]="name"
+        [inputFormatter]="groupSelectionFormatter" placeholder="label||'Group'" [formControl]="group" (selectItem)="onItemSelected($event)" />
+        <label>{{label||'Group'}}<span class="text-danger">*</span></label>
+       
+</form>

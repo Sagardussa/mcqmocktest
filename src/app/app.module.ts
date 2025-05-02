@@ -3,16 +3,27 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { QuizComponent } from './quiz/quiz.component';
+// import { SharedModule } from './shared/shared.module';
+import { LoaderComponent } from './shared/loader/loader.component';
+import { HeaderComponent } from './layout/header/header.component';
+import { LayoutComponent } from './layout/layout/layout.component';
+import { FooterComponent } from './layout/footer/footer.component';
+import { QuizComponent } from './components/quiz/quiz.component';
+import { Quiz2Component } from './components/quiz2/quiz2.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    QuizComponent
+    QuizComponent,
+    LoaderComponent,
+    Quiz2Component,
+    HeaderComponent,
+    LayoutComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

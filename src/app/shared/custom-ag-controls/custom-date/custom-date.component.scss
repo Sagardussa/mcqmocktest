@@ -1,0 +1,28 @@
+.mydatepicker{
+    padding: 0px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    // transform: translate(0px, -42px);
+}
+
+ngb-datepicker{
+    left: 0px !important;
+    top: 0px !important;
+    padding-top: 0px !important;
+    padding-right: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 0px !important;
+    // position: absolute !important;
+    // transform: translate(0px, 28px)!important;
+    z-index: 9999 !important;
+  }
+  .ngb-datepicker input {
+    z-index: 9999 !important;
+}
+
+
+ngb-datepicker.dropdown-menu.show.mydatepicker.ng-untouched.ng-pristine.ng-valid {
+    z-index: 9999 !important;
+    position: relative !important;
+}

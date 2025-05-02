@@ -1,0 +1,37 @@
+.context-menu {
+  display: block;
+  position: absolute;
+  user-select: none;
+  z-index: 999;
+  right: 60px;
+}
+
+.context-menu ul {
+  list-style: none;
+  padding: 4px 10px;
+  width: 15rem;
+  max-height: 300px;
+  color: black;
+  background: #fcfcfc;
+  border: 1px solid gray;
+  box-shadow: 0 1px 4px 1px rgb(186 191 199 / 40%);
+  overflow-x: auto;
+  position: relative;
+  right: 100px;
+  bottom: 150px;
+}
+
+.context-menu ul::-webkit-scrollbar-thumb {
+  background-color: greenyellow;
+}
+
+.context-menu ul li {
+  padding: 8px;
+  margin: 0;
+  line-height: 24px;
+  font-size: 14px;
+}
+
+.context-menu ul li:hover {
+  background: rgba(33, 150, 243, 0.1);
+}

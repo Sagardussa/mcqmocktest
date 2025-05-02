@@ -1,0 +1,6 @@
+<div class="context-menu pointer" tabindex="-1" aria-hidden="true">
+    <ul *ngIf="isDisplayMenu">
+        <li *ngFor="let menuItem of menuItems" (click)="onMenuClick(menuItem)">
+            <img *ngIf="menuItem.imgPath" class="img_hgt_wth" src="{{menuItem.imgPath}}">{{ menuItem.title }}</li>
+    </ul>
+</div>

@@ -1,0 +1,262 @@
+<ng-container *ngIf="!isPOSItemWindow">
+    <div class="modal-header sticky-header">
+        <h5 class="modal-title mt-0 mr-3">Item List</h5>
+        <div class="form-label-group mr-3">
+            <select name="usedFor" id="usedFor" class="form-control" [(ngModel)]="usedFor" (change)="onUsedForChange()">
+                <option value="">--select value--</option>
+                <option *ngFor="let pt of selectedOptions" [value]="pt.id">
+                    {{ pt.text }}
+                </option>
+            </select>
+            <label for="usedFor">Used For</label>
+        </div>
+        <button type="button" class="btn btn-light btn-sm" (click)="clearAll()">
+            <i class=" ri-eraser-line align-middle mr-2"></i>
+            Clear All
+        </button>
+        <span class="badge badge-soft-success font-size-16 ml-auto mr-auto">Total Items :-
+            <b>{{ filterRecordList.length}}</b>
+        </span>
+        <button type="button" class="close" aria-label="Close" (click)="cancelDialog()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="alert alert-primary" role="alert" *ngIf="isDataLoading">
+            <strong>Loading...</strong>
+            <div class="spinner-border text-success" role="status"></div>
+        </div>
+        <div class="card">
+            <p-table #dt1 [styleClass]="selectedSize.class" [value]="filterRecordList" selectionMode="single"
+                dataKey="id" [tableStyle]="{'min-width': '50rem'}" [scrollable]="true"
+                [scrollHeight]="'calc(100vh - 318px)'" (onRowSelect)="onRowSelect($event)">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>
+                            <div class="d-flex">
+                                <div class="flex-grow-1">
+                                    <div class="form-label-group">
+                                        <input id="item_CodeTxt" pInputText type="text"
+                                            (input)="dt1.filter($event.target.value, 'item_CodeTxt', 'contains')"
+                                            [value]="dt1.filters['item_CodeTxt']?.value" placeholder="Code"
+                                            class="form-control">
+                                        <label for="item_CodeTxt">Code</label>
+                                    </div>
+                                </div>
+                                <span pSortableColumn="item_CodeTxt"><p-sortIcon
+                                        field="item_CodeTxt"></p-sortIcon></span>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="d-flex">
+                                <div class="flex-grow-1">
+                                    <div class="form-label-group">
+                                        <input id="name" pInputText type="text"
+                                            (input)="dt1.filter($event.target.value, 'name', 'contains')"
+                                            [value]="dt1.filters['name']?.value" placeholder="Name"
+                                            class="form-control">
+                                        <label for="name">Name</label>
+                                    </div>
+                                </div>
+                                <span pSortableColumn="name"><p-sortIcon field="name"></p-sortIcon>
+                                </span>
+                            </div>
+                        </th>
+                        <th>
+                            <ng-select (change)="onCategoryChange($event)" [items]="categories" placeholder="Category"
+                                [(ngModel)]="filters.category" [multiple]="true" bindLabel="category"
+                                [searchable]="true">
+                            </ng-select>
+                        </th>
+                        <th>
+                            <ng-select (change)="onSizeChange($event)" [items]="sizes" placeholder="Sizes"
+                                [(ngModel)]="filters.sizes"
+                                (input)="dt1.filter($event.target.value, 'sizes', 'contains')" bindLabel="sizes"
+                                [searchable]="true">
+                            </ng-select>
+                        </th>
+                        <th>
+                            <ng-select (change)="onTypeChange($event)" [items]="types" placeholder="Type"
+                                [(ngModel)]="filters.type" (input)="dt1.filter($event.target.value, 'type', 'contains')"
+                                bindLabel="type" [searchable]="true">
+                            </ng-select>
+                        </th>
+                        <th>
+                            <ng-select (change)="onBrandChange($event)" [items]="brands" placeholder="Brand"
+                                [(ngModel)]="filters.brand" [multiple]="true" bindLabel="brand" [searchable]="true">
+                            </ng-select>
+                        </th>
+                        <th>
+                            <ng-select (change)="onItemGroupChange($event)" [items]="itemGroups" placeholder="Group"
+                                [(ngModel)]="filters.itemGroup" [multiple]="true" bindLabel="itemGroup"
+                                [searchable]="true">
+                            </ng-select>
+                        </th>
+                        <th>
+                            <div class="d-flex">
+                                <div class="flex-grow-1">
+                                    <div class="form-label-group">
+                                        <input id="hsnNo" pInputText type="text"
+                                            (input)="dt1.filter($event.target.value, 'hsnNo', 'contains')"
+                                            [value]="dt1.filters['hsnNo']?.value" placeholder="HSN"
+                                            class="form-control">
+                                        <label for="hsnNo">HSN</label>
+                                    </div>
+                                </div>
+                                <span pSortableColumn="hsnNo"><p-sortIcon field="hsnNo"></p-sortIcon></span>
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                    <tr [pSelectableRow]="item">
+                        <td>{{item.item_CodeTxt}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.category}}</td>
+                        <td>{{item.sizes}}</td>
+                        <td>{{item.type}}</td>
+                        <td>{{item.brand}}</td>
+                        <td>{{item.itemGroup}}</td>
+                        <td>{{item.hsnNo}}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="4">No records found.</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="alert bg-light mt-0 mb-0" role="alert">
+            <h6 class="mt-1 font-weight-bold">Total Items: {{ filterRecordList.length }}</h6>
+        </div>
+    </div>
+</ng-container>
+<!-- <ng-container *ngIf="isPOSItemWindow">
+    <div class="mb-2">
+        <ng-container *ngIf="filters.showCategory && categories?.length">
+            <div class="category-scroll">
+                <ng-container *ngFor="let category of categories">
+                    <button type="button" class="btn-sm mb-1 mt-1" style="text-wrap: nowrap;"
+                        [ngClass]="{'filter-button': true, 'selected': category.isSelected}"
+                        (click)="onCategoryClick(category)">
+                        {{ category.category }}
+                    </button>
+                    <span *ngIf="category.isSelected" (click)="onCategoryClick(category)"
+                        class="badge bg-danger float-end rounded-pill pointer close_btn font-size-13">x</span>
+                </ng-container>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="filters.showBrand && (filters?.category?.length && brands?.length)">
+            <div class="brand-scroll">
+                <ng-container *ngFor="let brand of brands">
+                    <button type="button" class="btn-sm mb-1 mt-1" style="text-wrap: nowrap;"
+                        [ngClass]="{'filter-button': true, 'selected': brand.isSelected}" (click)="onBrandClick(brand)">
+                        {{ brand.brand }}
+                    </button>
+                    <span *ngIf="brand.isSelected" (click)="onBrandClick(brand)"
+                        class="badge bg-danger float-end rounded-pill pointer close_btn font-size-13">
+                        <b>x</b>
+                    </span>
+                </ng-container>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="filters.showItemGroup &&(filters?.category?.length && itemGroups?.length)">
+            <div class="brand-scroll">
+                <ng-container *ngFor="let group of itemGroups">
+                    <button type="button" class="btn-sm mb-1 mt-1" style="text-wrap: nowrap;"
+                        [ngClass]="{'filter-button': true, 'selected': group.isSelected}" (click)="onGroupClick(group)">
+                        {{ group.itemGroup }}
+                    </button>
+                    <span *ngIf="group.isSelected" (click)="onGroupClick(group)"
+                        class="badge bg-danger float-end rounded-pill pointer close_btn font-size-13">
+                        <b>x</b>
+                    </span>
+                </ng-container>
+            </div>
+        </ng-container>
+    </div>
+    <cdk-virtual-scroll-viewport itemSize="20" [style.height]="getDynamicHeight()">
+        <div class="product-list mb-2">
+            <div class="product-cards-container">
+                <div *cdkVirtualFor="let item of filterRecordList" (click)="onSelectProduct(item)" class="product-card">
+                    <perfect-scrollbar style="max-height: 50px;">
+                        <div class="product-card-content">
+                            <h6 class="font-size-12"> {{ item.item_CodeTxt }}</h6>
+                            <h6 class="font-size-12"> {{ item.name }}</h6>
+                        </div>
+                    </perfect-scrollbar>
+                </div>
+            </div>
+        </div>
+    </cdk-virtual-scroll-viewport>
+</ng-container> -->
+<ng-container *ngIf="isPOSItemWindow">
+    <div class="mb-2">
+        <ng-container *ngIf="filters.showCategory && categories?.length">
+            <div class="category-scroll">
+                <ng-container *ngFor="let category of categories">
+                    <button type="button" class="btn-sm mb-1 mt-1" style="text-wrap: nowrap;"
+                        [ngClass]="{'filter-button': true, 'selected': category.isSelected}"
+                        (click)="onCategoryClick(category)">
+                        {{ category.category }}
+                    </button>
+                    <span *ngIf="category.isSelected" (click)="onCategoryClick(category)"
+                        class="badge bg-danger float-end rounded-pill pointer close_btn font-size-13">x</span>
+                </ng-container>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="filters.showBrand && (filters?.category?.length && brands?.length)">
+            <div class="brand-scroll">
+                <ng-container *ngFor="let brand of brands">
+                    <button type="button" class="btn-sm mb-1 mt-1" style="text-wrap: nowrap;"
+                        [ngClass]="{'filter-button': true, 'selected': brand.isSelected}" (click)="onBrandClick(brand)">
+                        {{ brand.brand }}
+                    </button>
+                    <span *ngIf="brand.isSelected" (click)="onBrandClick(brand)"
+                        class="badge bg-danger float-end rounded-pill pointer close_btn font-size-13">
+                        <b>x</b>
+                    </span>
+                </ng-container>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="filters.showItemGroup &&(filters?.category?.length && itemGroups?.length)">
+            <div class="brand-scroll">
+                <ng-container *ngFor="let group of itemGroups">
+                    <button type="button" class="btn-sm mb-1 mt-1" style="text-wrap: nowrap;"
+                        [ngClass]="{'filter-button': true, 'selected': group.isSelected}" (click)="onGroupClick(group)">
+                        {{ group.itemGroup }}
+                    </button>
+                    <span *ngIf="group.isSelected" (click)="onGroupClick(group)"
+                        class="badge bg-danger float-end rounded-pill pointer close_btn font-size-13">
+                        <b>x</b>
+                    </span>
+                </ng-container>
+            </div>
+        </ng-container>
+    </div>
+    <cdk-virtual-scroll-viewport itemSize="1" [style.height]="getDynamicHeight()">
+        <div class="product-cards-container">
+            <div *cdkVirtualFor="let item of filterRecordList" class="product-card" (click)="onSelectProduct(item)"
+                [ngStyle]="{
+                'background-image': printSettings.isImageRequired ? 'url(' + item.filename + ')' : 'none',
+                'background-size': printSettings.isImageRequired ? 'cover' : 'unset',
+                'background-position': printSettings.isImageRequired ? 'center' : 'unset'
+            }">
+                <div class="product-card-content">
+                    <h6 [ngStyle]="{'color': printSettings.isImageRequired && item.filename ? 'white' : 'black','font-size': printSettings.fontSize,
+        'font-weight': printSettings.isBold ? 'bold' : 'normal'}">{{
+                        item.name }}</h6>
+                </div>
+                <!-- Rate should be at the bottom -->
+                <div class="product-card-content product-card-rate" *ngIf="printSettings.isRateRequired">
+                    <h6 [ngStyle]="{'color': printSettings.isImageRequired && item.filename ? 'white' : 'black'}">
+                        {{ item.std_Sell_Rate | localPrecisionNumber : currentCompany.precision | async }}/-
+                    </h6>
+                </div>
+            </div>
+        </div>
+    </cdk-virtual-scroll-viewport>
+</ng-container>

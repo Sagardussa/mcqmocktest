@@ -1,0 +1,130 @@
+<div class="modal-header">
+    <h5 class="modal-title mt-0">POS Print Settings</h5>
+    <button type="button" class="close" aria-label="Close" (click)="passBack()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="send()" class="mb-3" autocomplete="off">
+    <div class="modal-body">
+        <ng-container *ngIf="isPrintBtnLoading">
+            <span class="indicator-progress" [style.display]="'block'">
+                Attaching invoice please wait..
+                <span class="spinner-border spinner-border-sm align-middle mr-2"></span>
+            </span>
+        </ng-container>
+        <div class="row">
+            <div class="col-md-6 mb-2">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="isImageRequired"
+                        formControlName="isImageRequired">
+                    <label class="custom-control-label" for="isImageRequired">Item With Images?</label>
+                </div>
+            </div>
+            <div class="col-md-6 mb-2">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="isRateRequired"
+                        formControlName="isRateRequired">
+                    <label class="custom-control-label" for="isRateRequired">Item With Rate?</label>
+                </div>
+            </div>
+            <div class="col-md-6 mb-2">
+                <div class="custom-control custom-radio">
+                    <input type="radio" class="custom-control-input" id="placementLeft" name="itemListPlacement"
+                        value="left" formControlName="itemListPlacement">
+                    <label class="custom-control-label" for="placementLeft">Item List on Left</label>
+                </div>
+            </div>
+            <div class="col-md-6 mb-2">
+                <div class="custom-control custom-radio">
+                    <input type="radio" class="custom-control-input" id="placementRight" name="itemListPlacement"
+                        value="right" formControlName="itemListPlacement">
+                    <label class="custom-control-label" for="placementRight">Item List on Right</label>
+                </div>
+            </div>
+            <!-- Font Size Option -->
+            <div class="col-md-6">
+                <div class="form-label-group">
+                    <select name="fontSize" id="fontSize" class="form-control" formControlName="fontSize">
+                        <option value=null>--Select Font Size--</option>
+                        <option value="12px">12px</option>
+                        <option value="14px">14px</option>
+                        <option value="16px">16px</option>
+                        <option value="18px">18px</option>
+                        <option value="20px">20px</option>
+                    </select>
+                    <label for="fontSize">Font Size</label>
+                </div>
+            </div>
+            <!-- Bold Option -->
+            <div class="col-md-6 d-flex align-items-center">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="isBold" formControlName="isBold">
+                    <label class="custom-control-label" for="isBold">Bold Text</label>
+                </div>
+            </div>
+            <div class="col-md-12 mt-3">
+                <h6>Preview:</h6>
+                <div class="p-2 border" [ngStyle]="{
+                        'font-size': form.get('fontSize')?.value,
+                        'font-weight': form.get('isBold')?.value ? 'bold' : 'normal'
+                    }">
+                    This is a preview of your selected text style.
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-label-group">
+                    <select name="printLanguage" id="printLanguage" class="form-control"
+                        formControlName="printLanguage">
+                        <option value=null>--select value--</option>
+                        <option *ngFor="let pt of appCommon.printLanguage" [value]="pt.id">
+                            {{ pt.text }}
+                        </option>
+                    </select>
+                    <label for="printLanguage">Print Language</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-label-group">
+                    <select name="printWidth" id="printWidth" class="form-control" formControlName="printWidth">
+                        <option value=null>--select value--</option>
+                        <option *ngFor="let pt of appCommon.PrintPDFSize" [value]="pt.val">
+                            {{ pt.text }}
+                        </option>
+                    </select>
+                    <label for="printWidth">Print Width</label>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!selectedFileName && !getImagePreview()">
+            <div class="custom-file" [hidden]="formResult.id">
+                <form [formGroup]="form">
+                    <input type="file" class="form-control" id="myfile" formControlName="files"
+                        (change)="onFileChange($event)" accept="image/*" />
+                    <label class="custom-file-label" for="myfile">Choose Logo file</label>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="d-flex align-items-center">
+                <div *ngIf="getImagePreview()" class="me-3 mt-2">
+                    <img [src]="getImagePreview()" alt="Logo Preview" style="max-width: 50px; max-height: 50px;" />
+                </div>
+                <div *ngIf="selectedFileName || getImagePreview()">
+                    <button type="button" class="btn btn-sm-danger ml-2 mt-3 icon-red" (click)="clear()">
+                        <i class="ri-delete-bin-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary btn-sm me-2 mt-2 mr-2" [disabled]="form.invalid">
+            Save Settings
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm mt-2" (click)="passBack()">
+            <i class="fa fa-times mr-2" aria-hidden="true"></i>Cancel
+        </button>
+    </div>
+</form>

@@ -1,0 +1,25 @@
+<form [formGroup]="form">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-label-group">
+                <ng-template #rt let-r="result" let-t="term">
+                    <div class="row">
+                        <div class="col-3" style="white-space: normal">{{ r.bilL_NO || ' ' }}</div>
+                        <div class="col-3" style="white-space: normal">{{ r.date || ' ' }}</div>
+                        <div class="col-3" style="white-space: normal">{{ r.grandtotalAbs || ' ' }}</div>
+                        <div class="col-3" style="white-space: normal">{{ r.invTypeText || ' ' }}</div>
+
+                    </div>
+                    <!-- </ng-template>
+            <div class="col-4" style="white-space: normal" *ngIf="(recordList)?.length===0  && form.get(formFieldName)?.value">No pending invoices found</div>
+            <ng-template > -->
+
+                </ng-template>
+                <input id="typeahead-basic" type="search" class="form-control" [ngbTypeahead]="billSelectionFilter"
+                    [resultTemplate]="rt" (selectItem)="onSelected($event)" [inputFormatter]="billSelectionFormatter"
+                    [formControlName]="formFieldName" [placeholder]="label||'Bill No'" />
+                <label for="BillNo">{{label||'Bill No'}}</label>
+            </div>
+        </div>
+    </div>
+</form>

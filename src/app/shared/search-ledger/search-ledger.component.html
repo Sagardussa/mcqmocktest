@@ -1,0 +1,107 @@
+<form *ngIf="ledgerSearchSearchForm" [formGroup]="ledgerSearchSearchForm" (ngSubmit)="searchLedgers()"
+    autocomplete="off">
+    <div class="row mt-3">
+        <div class="col-sm-2">
+            <div class="form-label-group">
+                <input #dfltinp type="text" id="name" class="form-control" formControlName="name" placeholder="Name" />
+                <label for="name">Name</label>
+            </div>
+        </div>
+        <div class="form-check ml-3 ">
+            <input class="form-check-input" type="radio" name="groupId" id="Customer" [value]="17"
+                formControlName="groupId" [checked]="ledgerSearchSearchForm.value.groupId == 17">
+            <label class="form-check-label" for="Customer">
+                Customer
+            </label>
+        </div>
+        <div class="form-check ml-2 mr-2">
+            <input class="form-check-input " type="radio" name="groupId" id="Supplier" [value]="16"
+                formControlName="groupId" [checked]="ledgerSearchSearchForm.value.groupId == 16">
+            <label class="form-check-label" for="Supplier">
+                Supplier
+            </label>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-label-group">
+                <select id="groupId" name="groupId" class="form-control dror_ht" formControlName="groupId">
+                    <option value="">Select Group</option>
+                    <option *ngFor="let item of groupList" [value]="item.id">
+                        {{ item.name }}
+                    </option>
+                </select>
+                <label for="groupId">Group</label>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-label-group">
+                <select id="assignedUserID" name="assignedUserID" class="form-control dror_ht"
+                    formControlName="assignedUserID">
+                    <option value="">Select Sales Person</option>
+                    <option *ngFor="let item of salesPersonList" [value]="item.id">
+                        {{ item.name }}
+                    </option>
+                </select>
+                <label for="assignedUserID">Sales Person</label>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-label-group">
+                <input type="date" id="tt2" class="form-control" formControlName="toDate" placeholder="To Date" />
+                <label for="tt2">To Date</label>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group mb-0">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-success mr-2 btn-sm">
+                        <ng-container *ngIf="isSearchBtnLoading">
+                            <span class="indicator-progress" [style.display]="'block'">
+                                <span class="spinner-border spinner-border-sm align-middle mr-2"></span>
+                            </span>
+                        </ng-container>
+                        <ng-container *ngIf="!isSearchBtnLoading">
+                            <span class="indicator-label"><i class="ri-search-line align-middle mr-2"></i>Search</span>
+                        </ng-container>
+                    </button>
+                    <button type="button" class="btn btn-light mr-2 btn-sm" (click)="clearLedgerSearchSearchForm()">
+                        <i class="   ri-restart-line align-middle mr-2"></i>Reset
+
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div [ngStyle]="gridHeightWidth">
+    <ag-grid-angular [suppressColumnVirtualisation]="true" style="width: 100%; height: 100%;" class="ag-theme-alpine"
+        [rowData]="ledgerList" [rowHeight]="appCommon.GridRowHeight" [columnDefs]="columnDefs"
+        (gridReady)="onGridReady($event)" [animateRows]="true" [rowSelection]="rowSelection"
+        [defaultColDef]="defaultColDef" [rowMultiSelectWithClick]="true" (filterChanged)="onFilterChanged()">
+    </ag-grid-angular>
+</div>
+<div class="alert bg-light mt-2" role="alert">
+    <div class="row">
+        <div class="col-sm-12 col-md-4 text-md-start">
+            <h6 class="mt-1 font-weight-bold">Total Rows :
+                {{ ledgerList.length }}</h6>
+        </div>
+        <div class="col-sm-12 col-md-4 text-md-end">
+            <h6 class="mt-1 font-weight-bold">Filtered Rows : {{
+                gridApi && gridApi.getModel()?
+                gridApi.getModel().rootNode.childrenAfterFilter.length : 0 }}</h6>
+        </div>
+        <div class="col-sm-12 col-md-4 text-md-end">
+            <div class="float-right">
+                <button type="button" class="btn btn-sm btn-primary me-2 mr-2" (click)="submit()">
+                    <i class=" ri-file-add-line align-middle mr-2"></i>
+                    Add To List
+                </button>
+                <button type="button" class="btn btn-success btn-sm mr-2" (click)="onNextClick()">
+                    <i class="  ri-arrow-right-fill align-middle mr-2"></i>
+                    Next
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

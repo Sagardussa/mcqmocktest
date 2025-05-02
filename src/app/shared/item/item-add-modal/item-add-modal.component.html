@@ -1,0 +1,199 @@
+<div class="modal-header">
+    <h5 class="modal-title mt-0">Add Item</h5>
+    <button type="button" class="close" aria-label="Close" (click)="cancelDialog()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form [formGroup]="form" (ngSubmit)="submit()" (keydown.enter)="$event.preventDefault()" autocomplete="off">
+    <div class="modal-body">
+        <div class="row">
+            <ng-template #name let-r="result" let-t="term">
+                <app-common-autocomplete-template [result]="r" templateType="name"></app-common-autocomplete-template>
+            </ng-template>
+            <div class="col-md-6">
+                <div class="form-label-group">
+                    <input #itemCode type="text" id="item_CodeTxt" class="form-control" placeholder="Item Code"
+                        formControlName="item_CodeTxt" />
+                    <label for="item_CodeTxt">Item Code</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-label-group ">
+                    <input type="text" id="name" class="form-control" placeholder="Name" formControlName="name" required
+                        [ngClass]="submitted && form.controls['name'].hasError('required')?'is-invalid':''" />
+                    <label for="name">Name<span class="text-danger">*</span></label>
+                    <div class="invalid-feedback">
+                        <span>This value is required.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-label-group ">
+                    <input type="search" class="form-control col" [ngbTypeahead]="categorySelectionFilter"
+                        [resultTemplate]="name" [inputFormatter]="categorySelectionFormatter" formControlName="category"
+                        placeholder="Category" (focus)="categoryfocus$.next($any($event).target.value)"
+                        (click)="categoryclick$.next($any($event).target.value)" #categoryinstance="ngbTypeahead" />
+                    <label for="tt2">Category</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-label-group ">
+                    <input type="search" class="form-control col" [ngbTypeahead]="sizeSelectionFilter"
+                        [resultTemplate]="name" [inputFormatter]="sizeSelectionFormatter" formControlName="sizes"
+                        placeholder="Sizes" (focus)="sizefocus$.next($any($event).target.value)"
+                        (click)="sizeclick$.next($any($event).target.value)" #sizeinstance="ngbTypeahead" />
+                    <label for="tt2">Sizes</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-label-group ">
+                    <input type="search" class="form-control col" [ngbTypeahead]="typeSelectionFilter"
+                        [resultTemplate]="name" [inputFormatter]="typeSelectionFormatter" formControlName="type"
+                        placeholder="Type" (focus)="typefocus$.next($any($event).target.value)"
+                        (click)="typeclick$.next($any($event).target.value)" #typeinstance="ngbTypeahead" />
+                    <label for="tt2">Type</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-label-group ">
+                    <input type="search" class="form-control col" [ngbTypeahead]="brandSelectionFilter"
+                        [resultTemplate]="name" [inputFormatter]="brandSelectionFormatter" formControlName="brand"
+                        placeholder="Brand" (focus)="brandfocus$.next($any($event).target.value)"
+                        (click)="brandclick$.next($any($event).target.value)" #brandinstance="ngbTypeahead" />
+                    <label for="tt2">Brand</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-label-group ">
+                    <input type="search" class="form-control col" [ngbTypeahead]="groupSelectionFilter"
+                        [resultTemplate]="name" [inputFormatter]="groupSelectionFormatter" formControlName="itemGroup"
+                        placeholder="Group" (focus)="groupfocus$.next($any($event).target.value)"
+                        (click)="groupclick$.next($any($event).target.value)" #groupinstance="ngbTypeahead" />
+                    <label for="tt2">Group</label>
+                    <div class="invalid-feedback">
+                        <span>This value is required.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-label-group">
+                    <input type="text" id="barcode" class="form-control" placeholder="Bar Code"
+                        formControlName="barcode" />
+                    <label for="barcode">Bar Code</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-label-group">
+                    <input type="text" id="hsnNo" class="form-control" placeholder="HSN No" formControlName="hsnNo" />
+                    <label for="hsnNo">HSN No</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-label-group">
+                    <input type="number" min="0" max="100" id="vatPer" class="form-control" placeholder="TAX %"
+                        formControlName="vatPer" />
+                    <label for="vatPer">TAX %</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-label-group">
+                    <select name="productType" class="form-control" formControlName="productType"
+                        [ngClass]="submitted && form.controls['productType'].hasError('required')?'is-invalid':''"
+                        required>
+                        <option *ngFor="let pt of appCommon.EnProductType" [value]="pt.id">
+                            {{ pt.name }}
+                        </option>
+                    </select>
+                    <label for="productType">Product Type<span class="text-danger">*</span></label>
+                    <div class="invalid-feedback">
+                        <span>This value is required.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-3">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" formControlName="mfrCodeReq" id="mfrCodeReq">
+                    <label class="custom-control-label" for="mfrCodeReq">Batch / Lot No.
+                        Req.</label>
+                </div>
+            </div>
+            <div class="form-group col-md-3">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" formControlName="expDate" id="expDate">
+                    <label class="custom-control-label" for="expDate">Exp Date</label>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-label-group">
+                    <input type="text" id="mrp" class="form-control" placeholder="MRP" formControlName="mrp" />
+                    <label for="mrp">MRP</label>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-label-group">
+                    <select name="std_Unit" class="form-control" formControlName="std_Unit"
+                        [ngClass]="submitted && form.controls['std_Unit'].hasError('required')?'is-invalid':''"
+                        required>
+                        <option *ngFor="let pt of unitList" [value]="pt.field2">
+                            {{ pt.field2 }}
+                        </option>
+                    </select>
+                    <label for="productType">UOM<span class="text-danger">*</span></label>
+                    <div class="invalid-feedback">
+                        <span>This value is required.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-label-group">
+                    <input type="text" id="std_Sell_Rate" class="form-control" placeholder="Rate"
+                        formControlName="std_Sell_Rate" />
+                    <label for="std_Sell_Rate">Rate</label>
+                </div>
+            </div>
+
+            <ng-container *ngIf="currentCompany?.businessType == 32">
+                <div class="col-md-3">
+                    <div class="form-label-group">
+                        <input type="text" id="rateDealer" class="form-control" placeholder="Rate Dealer"
+                            formControlName="rateDealer" />
+                        <label for="rateDealer">Rate Takeaway</label>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-label-group">
+                        <input type="text" id="rateRetailer" class="form-control" placeholder="Rate Retailer"
+                            formControlName="rateRetailer" />
+                        <label for="rateRetailer">Rate Online</label>
+                    </div>
+                </div>
+            </ng-container>
+
+            <div class="col-md-3">
+                <div class="form-label-group">
+                    <input type="number" id="last_Purchaserate" class="form-control" placeholder="Last Pur Rate"
+                        formControlName="last_Purchaserate" />
+                    <label for="last_Purchaserate">Last Pur Rate</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-sm mr-2" type="submit">
+            <i class="  ri-download-2-line align-middle mr-2"></i>
+            <ng-container *ngIf="isBtnLoading">
+                <span class="indicator-progress" [style.display]="'block'">
+                    Please wait...
+                    <span class="spinner-border spinner-border-sm align-middle mr-2"></span>
+                </span>
+            </ng-container>
+            <ng-container *ngIf="!isBtnLoading">
+                <span class="indicator-label">Insert</span>
+            </ng-container>
+        </button>
+        <button type="button" class="btn btn-light btn-sm me-2" (click)="clear()">
+            <i class=" ri-eraser-line align-middle mr-2"></i>Clear
+        </button>
+    </div>
+</form>

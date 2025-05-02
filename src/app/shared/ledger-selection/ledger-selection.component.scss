@@ -1,0 +1,53 @@
+:host {
+  width: 100%;
+}
+
+.ledger__selection {
+  display: flex;
+  width: 100%;
+  &-name,
+  &-mobile,
+  &-address {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &-name {
+    flex: 0 0 auto;
+    margin-right: 10px;
+  }
+  &-group {
+    flex: 0 0 100px;
+  }
+  &-mobile {
+    flex: 0 0 100px;
+  }
+  &-address {
+    flex: 0 0 350px;
+  }
+  &-area {
+    flex: 0 0 120px;
+  }
+  &-city {
+    flex: 0 0 120px;
+  }
+}
+.ledger__reset {
+  cursor: pointer;
+}
+
+app-ledger-selection {
+  // Rules added here won't leak out into the global CSS scope
+  .dropdown-menu {
+    // width: 600px;
+  }
+
+  .dropdown-menu [id^="filterselector"]{
+    width: 800px;
+    left: auto !important;
+    right: auto !important;       
+  }
+}
+
+

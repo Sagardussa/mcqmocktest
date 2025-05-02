@@ -1,0 +1,2289 @@
+<div class="modal-header">
+  <h5 class="modal-title mt-0">{{ invTypeText }}</h5>
+  <div class="row">
+    <button
+      class="btn btn-danger mr-2"
+      type="button"
+      (click)="authorizeInvoice()"
+      [disabled]="recordData.isAuthorized"
+      *ngIf="!recordData.isAuthorized && !isDataLoading && hasAuthorizeDocumentPermission"
+      ngbTooltip="Authorize {{ appCommon.InvoiceVoucherTypesObjByte[invType] }}"
+    >
+      <i class="fas fa-file-signature"></i>
+      <ng-container *ngIf="isAuthBtnLoading">
+        <span class="indicator-progress" [style.display]="'block'">
+          <span
+            class="spinner-border spinner-border-sm align-middle mr-2"
+          ></span>
+        </span>
+      </ng-container>
+      <ng-container *ngIf="!isAuthBtnLoading">
+        <span class="indicator-label"></span>
+      </ng-container>
+    </button>
+    <button
+      class="btn btn-warning mr-2 btn-sm"
+      type="button"
+      (click)="unauthorizeInvoice()"
+      [disabled]="!recordData.isAuthorized"
+      *ngIf="recordData.isAuthorized && !isDataLoading && hasAuthorizeDocumentPermission"
+      ngbTooltip="Un-Authorize {{
+        appCommon.InvoiceVoucherTypesObjByte[invType]
+      }}"
+    >
+      <i class="fas fa-file-signature"></i>
+      <ng-container *ngIf="isUnAuthBtnLoading">
+        <span class="indicator-progress" [style.display]="'block'">
+          <span
+            class="spinner-border spinner-border-sm align-middle mr-2"
+          ></span>
+        </span>
+      </ng-container>
+      <ng-container *ngIf="!isUnAuthBtnLoading">
+        <span class="indicator-label"></span>
+      </ng-container>
+    </button>
+    <button
+      type="button"
+      *ngIf="!isDataLoading"
+      class="btn btn-info mr-2"
+      (click)="onEdit()"
+    >
+      <i class="fas fas fa-pencil-alt align-middle"></i>
+    </button>
+    <button
+      type="button"
+      *ngIf="!isDataLoading"
+      class="btn btn-success mr-2"
+      (click)="onPrint()"
+    >
+      <ng-container *ngIf="isPrintBtnLoading">
+        <span class="indicator-progress">
+          <i class="fa fa-print" aria-hidden="true"></i>
+          <span class="spinner-border spinner-border-sm align-middle"></span>
+        </span>
+      </ng-container>
+      <ng-container *ngIf="isPrintBtnLoading === false">
+        <span class="indicator-label"
+          ><i class="fa fa-print" aria-hidden="true"></i>
+        </span>
+      </ng-container>
+    </button>
+    <button
+      type="button"
+      class="btn btn-light mr-2"
+      aria-label="Close"
+      (click)="passBack()"
+    >
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </button>
+  </div>
+</div>
+
+<div class="modal-body">
+  <div class="alert alert-primary" role="alert" *ngIf="isDataLoading">
+    <strong>Loading...</strong>
+    <div class="spinner-border text-success" role="status"></div>
+  </div>
+  <div *ngIf="!isDataLoading && recordData">
+    <div class="row mb-3">
+      <div class="col-sm-3 pr-0">
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered mb-0">
+            <tr *ngIf="recordData?.ledgerData?.name">
+              <td>
+                <span class="span-highlight">{{
+                  recordData?.ledgerData?.name
+                }}</span>
+              </td>
+            </tr>
+            <tr *ngIf="recordData.ledger_ID == 691">
+              <td>
+                Customer Name: <span> {{ recordData?.custName }}</span>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div
+        class="col-sm-2 p-0"
+        *ngIf="
+          setupInfoData.billingPlaces.length > 1 &&
+          (comapnyInfo.businessType != 23 ||
+            fieldVisibilityService.isFieldVisible(invType, 'spCode'))
+        "
+      >
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered mb-0">
+            <tr>
+              <td
+                *ngIf="
+                  setupInfoData.billingPlaces.length > 1 &&
+                  (comapnyInfo.businessType != 23 ||
+                    fieldVisibilityService.isFieldVisible(invType, 'spCode'))
+                "
+              >
+                {{ fieldVisibilityService.getFieldLabel(invType, "spCode") }} :
+                <span class="span-highlight">{{ spCodeData?.name }}</span>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="col-sm-3 p-0">
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered mb-0">
+            <tr *ngIf="recordData.bill_No">
+              <td>
+                <b>{{ labelBillNo ? labelBillNo : "Bill No" }} :</b>
+                <span class="span-highlight">{{ recordData.bill_No }}</span>
+              </td>
+            </tr>
+            <!-- <tr>
+                    <td><b>Credit Days :</b> {{recordData.dueDays}}</td>
+                    </tr>
+                    <tr>
+                    <td><b>Ref No :</b> {{recordData.refNo}}</td>
+                    </tr>
+                    <tr>
+                    <td><b>Date : </b> {{recordData.refDate | date: 'dd/MM/YYYY'}}</td>
+                    </tr>
+                    <tr>
+                    <td><b>Supply To :</b> {{recordData.shipToAddress}} {{recordData.ledgerData.state}}</td>
+                    </tr> -->
+          </table>
+        </div>
+      </div>
+      <div class="col-sm-2 p-0">
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered mb-0">
+            <tr *ngIf="recordData.invoiceNo">
+              <td>
+                {{ fieldVisibilityService.getFieldLabel(invType, "invoiceNo") }}
+                : <span class="span-highlight">{{ recordData.invoiceNo }}</span>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="col-sm-2 p-0">
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered mb-0">
+            <tr *ngIf="recordData.date">
+              <td>
+                {{ fieldVisibilityService.getFieldLabel(invType, "date") }} :
+                <span class="span-highlight">{{
+                  recordData?.date | date: "dd/MM/yyyy"
+                }}</span>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="custom-accordion-arrow accordion" [hidden]="invType == 32">
+      <div class="card">
+        <div class="card-header" (click)="toggleCollapseAdvanceOption()">
+          <button
+            type="button"
+            class="btn btn-link collapsed"
+            aria-expanded="false"
+            aria-controls="ngb-panel-0"
+          >
+            <h5 class="font-size-14 m-0">
+              <i class="mdi mdi-chevron-up accor-arrow-icon"></i>
+              Advance Option
+            </h5>
+          </button>
+        </div>
+
+        <div class="card-body">
+          <div [ngClass]="{ show: isAdvanceOptionCollapsed }" class="collapse">
+            <!-- <div class="d-flex justify-content-between align-items-center"> -->
+            <ul ngbNav #nav="ngbNav" class="nav-tabs nav-tabs-custom">
+              <li
+                [ngbNavItem]="1"
+                *ngIf="
+                  fieldVisibilityService.isDivVisible(invType, 'Main Info')
+                "
+              >
+                <a ngbNavLink>
+                  <span class="d-none d-sm-block"
+                    ><i class="fa fa-home mr-1" aria-hidden="true"></i>Main
+                    Info</span
+                  >
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="row mb-3">
+                        <div
+                          class="col-sm-3 pr-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'refNo'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "refNo"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.refNo
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-sm-2 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'refDate'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "refDate"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{  convertrefDate | date: 'dd/MM/yyyy' }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-sm-3 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'transactionType'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "transactionType"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    transactionTypedata?.text
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-sm-2 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'poNumber'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "poNumber"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.poNumber
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-sm-2 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'poDate'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "poDate"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.poDate | date: "dd/MM/yyyy"
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-sm-2 pr-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'yourRefNo'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "yourRefNo"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.yourRefNo
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-sm-2 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'yourRefDate'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "yourRefDate"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.yourRefDate
+                                      | date: "dd/MM/yyyy"
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-sm-2 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'otherRefNo'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "otherRefNo"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.otherRefNo
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-sm-2 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'otherRefDate'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "otherRefDate"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.otherRefDate
+                                      | date: "dd/MM/yyyy"
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-sm-3 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'againstRefNo'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "againstRefNo"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.againstRefNo
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-sm-3 pr-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'againstRefDate'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "againstRefDate"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.againstRefDate
+                                      | date: "dd/MM/yyyy"
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-sm-2 pr-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'dueDays'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "dueDays"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData.dueDays
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-sm-3 pr-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'pidNo'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "pidNo"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.pidNO
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </li>
+              <li
+                [ngbNavItem]="6"
+                *ngIf="
+                  fieldVisibilityService.isDivVisible(invType, 'Address Info')
+                "
+              >
+                <a ngbNavLink>
+                  <span class="d-none d-sm-block"
+                    ><i class="fa fa-home mr-1" aria-hidden="true"></i>Address
+                    Info</span
+                  >
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="row">
+                        <div
+                          class="col-sm-4 pr-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'state'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "state"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData.ledgerData.state
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-6 pr-0">
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  Billing Ledger :
+                                  <span class="span-highlight">{{
+                                    recordData.ledgerData.name
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="col-sm-6 p-0">
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  Shipping Ledger :
+                                  <span class="span-highlight">{{
+                                    recordData.ledgerData.name
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="col-sm-6 pr-0">
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "partyAddress"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData.partyAddress
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="col-sm-6 p-0">
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "shipToAddress"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData.shipToAddress
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="col-sm-6 pr-0">
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "buyerLedgerAddGst"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData.ledgerData.gstNo
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="col-sm-6 p-0">
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "shiptoLedgerAddGst"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData.ledgerData.gstNo
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" *ngIf="invType == 35">
+                        <div class="col-md-6">
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  Contact Person :
+                                  <span class="span-highlight"></span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  Contact Person Mobile :
+                                  <span class="span-highlight"></span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </li>
+              <li
+                [ngbNavItem]="2"
+                *ngIf="
+                  fieldVisibilityService.isDivVisible(invType, 'Other Info')
+                "
+              >
+                <a ngbNavLink>
+                  <span class="d-none d-sm-block"
+                    ><i class="fa fa-home mr-1" aria-hidden="true"></i>Other
+                    Info</span
+                  >
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="row">
+                        <div
+                          class="col-md-4 pr-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'remark'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "remark"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData.remark
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'subject'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "subject"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.subject
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'kindAttention'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "kindAttention"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.kindAttention
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 pr-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'paymentTerms'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "paymentTerms"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.paymentTerms
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 pr-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'projectName'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "projectName"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.projectName
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'lrNo'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "lrNo"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.lrNo
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 pr-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'vehicleNo'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "vehicleNo"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.vehicleNo
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'deliveryBy'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "deliveryBy"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.deliveryBy
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 pr-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'transportBy'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "transportBy"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData.transportBy
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 pr-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'note'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "note"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData.note
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'refPerson'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "refPerson"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData.refPerson
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'refPersonNo'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "refPersonNo"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData.refPersonNo
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'referenceByUserId'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "referenceByUserId"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData.referenceByUserId
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <ng-container *ngIf="comapnyInfo.businessType == 27">
+                          <div class="col-md-2 p-0">
+                            <div class="table-responsive">
+                              <table class="table table-sm table-bordered mb-0">
+                                <tr>
+                                  <!-- <td>{{fieldVisibilityService.getFieldLabel(invType, 'referenceByUserId')}} : <span class="span-highlight">{{recordData.referenceByUserId}}</span></td> -->
+                                  <td>Plant Name: <span></span></td>
+                                </tr>
+                              </table>
+                            </div>
+                          </div>
+                          <div class="col-md-2 pr-0">
+                            <div class="table-responsive">
+                              <table class="table table-sm table-bordered mb-0">
+                                <tr>
+                                  <!-- <td>{{fieldVisibilityService.getFieldLabel(invType, 'referenceByUserId')}} : <span class="span-highlight">{{recordData.referenceByUserId}}</span></td> -->
+                                  <td>Machine Name: <span></span></td>
+                                </tr>
+                              </table>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </li>
+              <li
+                [ngbNavItem]="3"
+                *ngIf="
+                  fieldVisibilityService.isDivVisible(invType, 'Admin Info')
+                "
+              >
+                <a ngbNavLink>
+                  <span class="d-none d-sm-block"
+                    ><i class="fa fa-home mr-1" aria-hidden="true"></i>Admin
+                    Info</span
+                  >
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="row">
+                        <div
+                          class="col-md-3 pr-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'quotationByUserID'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "quotationByUserID"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    quotationByUserPerson
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 pr-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'orderByUserID'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "orderByUserID"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    orderByUserPerson
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 pr-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'salesByUserID'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "salesByUserID"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    salesPerson
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'preparedByUserID'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "preparedByUserID"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData.preparedBy
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'loginByUserIDText'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "loginByUserIDText"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.loginByUserIDText
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 pr-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'departmentUserId'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "departmentUserId"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    departmentUserPerson
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'departmentId'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "departmentId"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    departmentPerson
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </li>
+              <li
+                [ngbNavItem]="4"
+                *ngIf="
+                  fieldVisibilityService.isDivVisible(invType, 'projectName') &&
+                  comapnyInfo.businessType != 23
+                "
+              >
+                <a ngbNavLink>
+                  <span class="d-none d-sm-block"
+                    ><i class="fa fa-home mr-1" aria-hidden="true"></i>Project
+                    Site</span
+                  >
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="row">
+                        <div
+                          class="col-md-4 pr-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'projectSiteId'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "projectSiteId"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.projectSiteId
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-8 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'projectSiteAddress'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "projectSiteAddress"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.projectSiteAddress
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </li>
+              <li
+                [ngbNavItem]="5"
+                *ngIf="
+                  comapnyInfo.isMultiCurrency &&
+                  fieldVisibilityService.isDivVisible(invType, 'Currency')
+                "
+              >
+                <a ngbNavLink>
+                  <span class="d-none d-sm-block"
+                    ><i class="fa fa-home mr-1" aria-hidden="true"></i
+                    >Currency</span
+                  >
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="row">
+                        <div
+                          class="col-md-3 pr-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'baseCurrency'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "baseCurrency"
+                                    )
+                                  }}
+                                  : <span class="span-highlight">{{compCurrencyData?.name}}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'convertedCurrency'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "convertedCurrency"
+                                    )
+                                  }}
+                                  : <span class="span-highlight">{{selectedCurrencyData?.name }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'convertedRate'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "convertedRate"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.currRate | localPrecisionNumber : precision | async
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-3 p-0"
+                          *ngIf="
+                            fieldVisibilityService.isFieldVisible(
+                              invType,
+                              'convertedGrandTotal'
+                            )
+                          "
+                        >
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  {{
+                                    fieldVisibilityService.getFieldLabel(
+                                      invType,
+                                      "convertedGrandTotal"
+                                    )
+                                  }}
+                                  :
+                                  <span class="span-highlight">{{
+                                    recordData?.currTotal | localPrecisionNumber : precision | async
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </li>
+              <li
+                [ngbNavItem]="7"
+                *ngIf="comapnyInfo.businessType == 26 && invType == 4"
+              >
+                <a ngbNavLink>
+                  <span class="d-none d-sm-block"
+                    ><i class="fa fa-home mr-1" aria-hidden="true"></i
+                    >Survey</span
+                  >
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-2 pr-0">
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  Survey No :
+                                  <span class="span-highlight">{{
+                                    recordData?.surveyNo
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="col-md-3 p-0">
+                          <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                              <tr>
+                                <td>
+                                  Survey Date :
+                                  <span class="span-highlight">{{
+                                    recordData?.surveyDate | date: "dd/MM/YYYY"
+                                  }}</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </li>
+            </ul>
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div *ngIf="existingItem.length && checkForItemExctraChargeDiv()">
+        <ul
+          ngbNav
+          #nav="ngbNav"
+          [activeId]="selectedItemTab"
+          class="nav-tabs nav-tabs-custom"
+        >
+          <li [ngbNavItem]="1" (click)="onTabClick(1)">
+            <a ngbNavLink>
+              <span class="d-none d-sm-block"
+                ><i class="fa fa-home mr-1" aria-hidden="true"></i>Item
+                Details</span
+              >
+            </a>
+            <ng-template ngbNavContent>
+              <ng-container *ngTemplateOutlet="sharedContent"></ng-container>
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="2" (click)="onTabClick(2)">
+            <a ngbNavLink>
+              <span class="d-none d-sm-block"
+                ><i class="fa fa-home mr-1" aria-hidden="true"></i>Item Extra
+                Charges</span
+              >
+            </a>
+            <ng-template ngbNavContent>
+              <ng-container *ngTemplateOutlet="sharedContent"></ng-container>
+            </ng-template>
+          </li>
+        </ul>
+        <div [ngbNavOutlet]="nav"></div>
+      </div> -->
+
+    <!-- <div *ngIf="!existingItem.length || !checkForItemExctraChargeDiv()">
+        <ng-container *ngTemplateOutlet="sharedContent"></ng-container>
+      </div> -->
+
+    <div *ngIf="isDetailsInTab">
+      <div class="card-body">
+        <ul
+          ngbNav
+          #nav="ngbNav"
+          [activeId]="selectedTab"
+          class="nav-tabs nav-tabs-custom"
+        >
+          <li [ngbNavItem]="1" (click)="onTabClick(1)">
+            <a ngbNavLink>
+              <span class="d-none d-sm-block"
+                ><i class="fa fa-home mr-1" aria-hidden="true"></i
+                >{{ tab1 }}</span
+              >
+            </a>
+            <ng-template ngbNavContent>
+              <ng-container *ngTemplateOutlet="sharedContent"></ng-container>
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="2" (click)="onTabClick(2)">
+            <a ngbNavLink>
+              <span class="d-none d-sm-block"
+                ><i class="fa fa-home mr-1" aria-hidden="true"></i
+                >{{ tab2 }}</span
+              >
+            </a>
+            <ng-template ngbNavContent>
+              <ng-container *ngTemplateOutlet="sharedContent"></ng-container>
+            </ng-template>
+          </li>
+        </ul>
+        <div [ngbNavOutlet]="nav"></div>
+      </div>
+    </div>
+
+    <div *ngIf="!isDetailsInTab">
+      <ng-container *ngTemplateOutlet="sharedContent"></ng-container>
+    </div>
+
+    <ng-template #sharedContent>
+      <div [ngStyle]="gridHeightWidth" class="mb-2 mt-2">
+        <ag-grid-angular
+          [suppressColumnVirtualisation]="true"
+          style="width: 100%; height: 200px"
+          class="ag-theme-alpine"
+          [rowData]="filteredInvoiceItemList"
+          [columnDefs]="columnDefs"
+          (gridReady)="onGridReady($event)"
+          [frameworkComponents]="frameworkComponents"
+          [animateRows]="true"
+          [singleClickEdit]="true"
+          oncontextmenu="return false;"
+          [rowHeight]="appCommon.GridRowHeight"
+        >
+        </ag-grid-angular>
+      </div>
+    </ng-template>
+
+    <div class="custom-accordion-arrow accordion mt-2">
+      <div class="card">
+        <div class="card-header">
+          <button
+            type="button"
+            class="btn btn-link collapsed"
+            aria-expanded="false"
+            aria-controls="ngb-panel-0"
+            (click)="toggleCollapseExtraCharges()"
+          >
+            <h5 class="font-size-14 m-0">
+              <i class="mdi mdi-chevron-up accor-arrow-icon"></i>Extra Charges
+            </h5>
+          </button>
+          <div class="row card_p ml-3">
+            <div class="col-sm-12 col-md-2 text-md-start">
+              <h6 class="mt-1 font-weight-bold">Total Qty : {{ totalQty }}</h6>
+            </div>
+            <div class="col-sm-12 col-md-10">
+              <div class="row">
+                <div class="col-sm-12 col-md-3 text-md-end">
+                  <h6 class="mt-1 font-weight-bold">
+                    Total GST :
+                    {{
+                      totalGSTAmount | localPrecisionNumber : precision : true :
+                      selectedCurrencyData.code | async
+                    }}
+                  </h6>
+                </div>
+                <div class="col-sm-12 col-md-3 text-md-end">
+                  <h6 class="mt-1 font-weight-bold">
+                    Total Amount :
+                    {{ totalAmount | localPrecisionNumber : precision : true : 
+                      selectedCurrencyData.code | async }}
+                  </h6>
+                </div>
+                <div class="col-sm-12 col-md-3 text-md-end">
+                  <h6 class="mt-1 font-weight-bold">
+                    Grand Total :
+                    {{
+                      totalGSTAmount + totalAmount
+                      | localPrecisionNumber : precision : true : selectedCurrencyData.code 
+                      | async
+                    }}
+                  </h6>
+                </div>
+                <div class="col-sm-12 col-md-3 text-md-end" *ngIf="invoiceFieldVisibilityService.isFieldVisible(invType,'Total Profit')">
+                  <h6 class="mt-1 font-weight-bold">Total Profit : {{ totalProfit | localPrecisionNumber : precision : true | async }}</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div [ngClass]="{ show: isExtraChargesCollapsed }" class="collapse">
+          <div class="card-body">
+            <div class="card">
+              <div class="card-body">
+                <div
+                  class="alert bg-light text-center mt-3"
+                  *ngIf="invType == 23 || invType == 5"
+                >
+                  <div class="row">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-8 text-right">
+                      <button
+                        type="button"
+                        class="btn btn-primary btn-sm mr-2"
+                        (click)="exportToExcel()"
+                      >
+                        <i class="ri-file-download-line align-middle mr-2"></i>
+                        <ng-container *ngIf="isExportBtnLoading">
+                          <span
+                            class="indicator-progress"
+                            [style.display]="'block'"
+                          >
+                            Please wait...
+                            <span
+                              class="spinner-border spinner-border-sm align-middle mr-2"
+                            ></span>
+                          </span>
+                        </ng-container>
+                        <ng-container *ngIf="isExportBtnLoading === false">
+                          <span class="indicator-label">Eport</span>
+                        </ng-container>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-success btn-sm mr-2"
+                        (click)="onCheckStock()"
+                      >
+                        <i
+                          class="ri-checkbox-multiple-line align-middle mr-2"
+                        ></i>
+                        <ng-container *ngIf="isBtnLoading">
+                          <span
+                            class="indicator-progress"
+                            [style.display]="'block'"
+                          >
+                            Please wait...
+                            <span
+                              class="spinner-border spinner-border-sm align-middle mr-2"
+                            ></span>
+                          </span>
+                        </ng-container>
+                        <ng-container *ngIf="!isBtnLoading">
+                          <span class="indicator-label">Check Stock</span>
+                        </ng-container>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-warning btn-sm mr-2"
+                        (click)="onPendingCheck()"
+                      >
+                        <i
+                          class="ri-checkbox-multiple-line align-middle mr-2"
+                        ></i>
+                        <ng-container *ngIf="isPendingBtnLoading">
+                          <span
+                            class="indicator-progress"
+                            [style.display]="'block'"
+                          >
+                            Please wait...
+                            <span
+                              class="spinner-border spinner-border-sm align-middle mr-2"
+                            ></span>
+                          </span>
+                        </ng-container>
+                        <ng-container *ngIf="isPendingBtnLoading === false">
+                          <span class="indicator-label">Check Pending</span>
+                        </ng-container>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-info btn-sm"
+                        (click)="onPendingDetailsCheck()"
+                      >
+                        <i
+                          class="ri-checkbox-multiple-line align-middle mr-2"
+                        ></i>
+                        <ng-container *ngIf="isPendingDetailsBtnLoading">
+                          <span
+                            class="indicator-progress"
+                            [style.display]="'block'"
+                          >
+                            Please wait...
+                            <span
+                              class="spinner-border spinner-border-sm align-middle mr-2"
+                            ></span>
+                          </span>
+                        </ng-container>
+                        <ng-container
+                          *ngIf="isPendingDetailsBtnLoading === false"
+                        >
+                          <span class="indicator-label"
+                            >Check Pending Details</span
+                          >
+                        </ng-container>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row" *ngIf="recordData">
+                  <div class="col-sm-6">
+                    <span
+                      class="card-text"
+                      *ngFor="
+                        let note of notes['controls'];
+                        let i = index;
+                        last as last
+                      "
+                    >
+                      <label
+                        ><b class="txt_upper">{{ note?.value?.title }}:</b>
+                      </label>
+                      {{ note?.value?.note }} </span
+                    ><br />
+                    <span class="card-text prep" *ngIf="recordData.preparedBy"
+                      ><b
+                        ><label>Prepared By :</label>
+                        {{ recordData?.preparedBy }}</b
+                      ></span
+                    >
+                  </div>
+                  <div class="col-sm-6">
+                    <span class="card-text"
+                      ><label><b>Sub Total :</b></label>
+                      <span class="text_right">
+                        {{
+                          recordData?.item_SubTotal
+                            | localPrecisionNumber : precision : true : selectedCurrencyData.code
+                            | async
+                        }}
+                      </span>
+                    </span>
+                    <hr />
+                    <div class="card-text">
+                      <div class="row">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-3">
+                          <span class="text_right font-12px font-bold"
+                            >Tax Percent</span
+                          >
+                        </div>
+                        <div class="col-sm-3">
+                          <span class="text_right font-12px font-bold"
+                            >Assess Value</span
+                          >
+                        </div>
+                        <div class="col-sm-3">
+                          <span class="text_right font-12px font-bold"
+                            >Amount</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="card-text"
+                      *ngFor="let ec of extraCharges.controls; let i = index"
+                    >
+                      <div [formGroup]="getFormGroupAt(i)">
+                        <div class="row">
+                          <div class="col-sm-3">
+                            <span>{{ getFormGroupAt(i).value.name }}</span>
+                          </div>
+                          <div class="col-sm-3">
+                            <span
+                              class="text_right"
+                              [hidden]="
+                                getFormGroupAt(i).value.taxPercentDisabled
+                              "
+                              >{{
+                                getFormGroupAt(i).value.perVal
+                                  | localPrecisionNumber : precision : true : selectedCurrencyData.code
+                                  | async
+                              }}</span
+                            >
+                          </div>
+                          <div class="col-sm-3">
+                            <span
+                              class="text_right"
+                              [hidden]="
+                                getFormGroupAt(i).value.taxType == 0 ||
+                                getFormGroupAt(i).value.taxType == 5
+                              "
+                              >{{
+                                getFormGroupAt(i).value.vatAssessValue
+                                  | localPrecisionNumber : precision : true : selectedCurrencyData.code
+                                  | async
+                              }}</span
+                            >
+                          </div>
+                          <div class="col-sm-3">
+                            <span class="text_right">{{
+                              getFormGroupAt(i).value.amount
+                                | localPrecisionNumber : precision : true : selectedCurrencyData.code
+                                | async
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <span class="card-text">
+                      <label><b>Round Off:</b></label>
+                      <span class="text_right">
+                        {{
+                          recordData.roundOff
+                            | localPrecisionNumber : precision : true : selectedCurrencyData.code
+                            | async
+                        }}
+                      </span>
+                    </span>
+                    <hr />
+                    <span class="card-text">
+                      <label><b>Grand Total:</b></label>
+                      <span class="text_right">
+                        {{
+                          recordData?.grandTotal
+                            | localPrecisionNumber : precision : true : selectedCurrencyData.code
+                            | async
+                        }}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="custom-accordion-arrow accordion" *ngIf="isPaymentDivVisible && paymentModeList.length">
+      <div class="card">
+        <div class="card-header" (click)="togglePaymentCollapse()">
+          <button
+            type="button"
+            class="btn btn-link collapsed"
+            aria-expanded="false"
+            aria-controls="ngb-panel-0"
+          >
+            <h5 class="font-size-14 m-0">
+              <i class="mdi mdi-chevron-up accor-arrow-icon"></i>Payment
+            </h5>
+          </button>
+        </div>
+        <div [ngClass]="{ show: isPaymentCollapsed }" class="collapse">
+          <div class="card-body">
+            <div class="card">
+              <div class="card-body">
+                <div class="row mb-2">
+                  <div class="col-md-2" *ngIf="paymentmodeTypeobj?.text">
+                    <div class="table-responsive">
+                      <table class="table table-sm table-bordered mb-0">
+                        <tr>
+                          <td>
+                            Payment Mode :
+                            <span class="span-highlight">
+                              {{ paymentmodeTypeobj?.text }}
+                            </span>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <ag-grid-angular
+                  [suppressColumnVirtualisation]="true"
+                  class="ag-theme-alpine ag_grid_h"
+                  [rowData]="paymentModeList"
+                  [columnDefs]="columnDefsPayment"
+                  (gridReady)="onGridReadyPaymnet($event)"
+                  [animateRows]="true"
+                  [domLayout]="domLayout"
+                  *ngIf="paymentModeList.length"
+                  [rowHeight]="appCommon.GridRowHeight"
+                >
+                </ag-grid-angular>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ngb-accordion
+      #acc="ngbAccordion"
+      class="custom-accordion-arrow"
+      *ngIf="matchingTermContnList.length && isTermContnAllowed"
+    >
+      <ngb-panel>
+        <ng-template ngbPanelTitle>
+          <h5 class="font-size-14 m-0">
+            <i class="mdi mdi-chevron-up accor-arrow-icon"></i>Terms &
+            Conditions
+          </h5>
+        </ng-template>
+        <ng-template ngbPanelContent>
+          <div id="myForm" class="table-responsive mb-3 terms_t_h">
+            <table class="table table-sm table-bordered mb-0">
+              <thead>
+                <tr>
+                  <th class="text-center bg-lightblue">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of matchingTermContnList; let i = index">
+                  <td>{{ item.tncText }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
+
+    <div class="custom-accordion-arrow accordion" [hidden]="form.value.id">
+      <div class="card">
+        <div class="card-header" (click)="toggleFileUploadCollapse()">
+          <button
+            type="button"
+            class="btn btn-link collapsed"
+            aria-expanded="false"
+            aria-controls="ngb-panel-0"
+          >
+            <h5 class="font-size-14 m-0">
+              <i class="mdi mdi-chevron-up accor-arrow-icon"></i>Attach
+              Documents
+            </h5>
+          </button>
+        </div>
+        <div [ngClass]="{ show: isFileUploadCollapsed }" class="collapse">
+          <div class="card-body">
+            <div class="card">
+              <div class="card-body">
+                <form
+                  [formGroup]="form"
+                  autocomplete="off"
+                  *ngIf="recordData.id"
+                >
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <input
+                        class="form-control"
+                        type="file"
+                        id="myfile"
+                        formControlName="files"
+                        (change)="onFileChange($event)"
+                        accept=".pdf, .doc, .docx, .xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document
+                              ,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                        [ngClass]="
+                          submitted &&
+                          form.controls['files'].hasError('required')
+                            ? 'is-invalid'
+                            : ''
+                        "
+                      />
+                      <div class="invalid-feedback">
+                        <span>This value is required.</span>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="form-group mb-0 mt-1">
+                        <div class="col-md-12">
+                          <button
+                            type="button"
+                            class="btn btn-success btn-sm mr-2"
+                            (click)="onSingleUploadClick()"
+                          >
+                            <ng-container *ngIf="isBtnLoading">
+                              <span
+                                class="indicator-progress"
+                                [style.display]="'block'"
+                              >
+                                Upload
+                                <span
+                                  class="spinner-border spinner-border-sm align-middle mr-2"
+                                ></span>
+                              </span>
+                            </ng-container>
+                            <ng-container *ngIf="!isBtnLoading">
+                              <span class="indicator-label"
+                                ><i
+                                  class="ri-upload-2-line align-middle mr-2"
+                                ></i
+                                >Upload</span
+                              >
+                            </ng-container>
+                          </button>
+
+                          <button
+                            type="button"
+                            class="btn btn-light btn-sm mr-2"
+                            (click)="clear()"
+                          >
+                            <i class="ri-eraser-line align-middle mr-2"></i>
+                            Clear
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+
+                <table class="table table-striped mt-4">
+                  <thead>
+                    <tr>
+                      <th>File Name</th>
+                      <th *ngIf="!recordData.id">Size</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let file of fileList; let i = index">
+                      <td>{{ file.fileName }}</td>
+                      <td *ngIf="!recordData?.id">
+                        {{ file?.size / 1024 / 1024 | number : ".2" }} MB
+                      </td>
+                      <td>
+                        <a
+                          (click)="openPreview(smallDataModal, file.filePath)"
+                          *ngIf="file.filePath"
+                          class="mr-3 text-primary pointer"
+                          ngbTooltip="Image Preview"
+                          ><i class="mdi mdi-monitor-eye font-size-18"></i
+                        ></a>
+                        <a
+                          (click)="downloadDocument(file.fileName,file.filePath)"
+                          class="mr-3 text-primary pointer"
+                          ngbTooltip="Download Document"
+                          ><i class="mdi mdi-download font-size-18"></i
+                        ></a>
+                        <a
+                          (click)="removeFile(file, i)"
+                          class="text-danger pointer"
+                          ngbTooltip="Delete"
+                        >
+                          <i
+                            class="mdi mdi-minus-circle-outline font-size-18"
+                            *ngIf="!file.id"
+                          ></i>
+                          <i
+                            class="mdi mdi-trash-can font-size-18"
+                            *ngIf="file.id"
+                          ></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <ng-template #smallDataModal let-modal>
+                  <div class="modal-header">
+                    <h5 class="modal-title mt-0">Image Preview</h5>
+                    <button
+                      type="button"
+                      class="close"
+                      (click)="modal.dismiss('Cross click')"
+                      aria-hidden="true"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  <div class="modal-bodyFile">
+                    <img [src]="previewImage" class="preview-imageFile" />
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+:host {
+    width: 100%;
+  }
+  
+  .selection {
+    display: flex;
+    width: 100%;
+    &-name,   
+    &-name {
+      flex: 0 0 200px;
+    }&-date {
+      flex: 0 0 200px;
+    }&-total {
+      flex: 0 0 150px;
+    }&-type {
+      flex: 0 0 150px;
+    }  
+  }
+  .ledger__reset {
+    cursor: pointer;
+  }
+
+  app-pending-voucher-selection {
+  
+    .dropdown-menu {
+        width: 800px;
+        left: auto !important;
+        right: auto !important;       
+      }    
+    
+  }
+  

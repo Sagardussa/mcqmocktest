@@ -1,0 +1,17 @@
+<div class="d-flex flex-column">
+    <form [formGroup]="form">
+        <div class="form-label-group">
+            <ng-template #rt let-r="result" let-t="term">
+                <app-common-autocomplete-template [result]="r" templateType="item"></app-common-autocomplete-template>
+            </ng-template>
+            <input #typehead id="typeahead-basic" type="search" [placeholder]="label||'Item'" class="form-control"
+                [ngbTypeahead]="itemSelectionFilter" [resultTemplate]="rt" [inputFormatter]="itemSelectionFormatter"
+                formControlName="item" required (selectItem)="onItemSelected($event)" (closed)="panelClosed()"
+                (keydown.tab)="onTabClick();" (input)="onInputChange(typehead.value)" (keydown.shift)="onShiftClick();" />
+            <label for="typeahead-basic">{{label||'Item'}}</label>
+        </div>
+    </form>
+    <div *ngIf="selectedRackName">
+        <b class="badge badge-info">{{ selectedRackName }}</b>
+    </div>
+</div>

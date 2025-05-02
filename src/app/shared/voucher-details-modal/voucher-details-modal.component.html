@@ -1,0 +1,89 @@
+<!-- <div class="modal-header">
+    <h5 class="modal-title mt-0">{{invTypeText}}</h5>
+    <div class="row">
+        <button type="button btn-sm" class="btn btn-info mr-2" (click)="onEdit()">
+            <i class="fas fas fa-pencil-alt align-middle"></i>
+        </button>
+        <button type="button" class="btn btn-success mr-2" (click)="onPrint()">
+            <ng-container *ngIf="isPrintBtnLoading">
+                <span class="indicator-progress">
+                    <i class="fa fa-print" aria-hidden="true"></i>
+                    <span class="spinner-border spinner-border-sm align-middle"></span>
+                </span>
+            </ng-container>
+            <ng-container *ngIf="isPrintBtnLoading ===false">
+                <span class="indicator-label"><i class="fa fa-print" aria-hidden="true"></i> </span>
+            </ng-container>
+        </button>
+        <button type="button" class="btn btn-light mr-2" aria-label="Close" (click)="passBack()">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="alert alert-primary" role="alert" *ngIf="isDataLoading">
+        <strong>Loading...</strong>
+        <div class="spinner-border text-success loading" role="status">
+        </div>
+    </div>
+    <div *ngIf="!isDataLoading">
+        <div class="row">
+            <div class="col-sm-3">
+                <span class="card-text"><b><label>Date : </label> {{recordData.date | date: 'MMM
+                        dd,yyyy'}}</b></span><br>
+            </div>
+            <div class="col-sm-3"> </div>
+            <div class="col-sm-3"> </div>
+            <div class="col-sm-3">
+                <span class="card-text"><b><label>Bill No :</label> {{recordData.billNo}}</b></span><br>
+            </div>
+        </div>
+        <div class="row col-sm-12">
+            <div class="col-sm-6">Party </div>
+            <div class="col-sm-2">Debit</div>
+            <div class="col-sm-2">Credit</div>
+            <div class="col-sm-2"> </div>
+        </div>
+
+        <hr class="hr-line">
+        <div *ngFor="let item of recordData.ledgerDetails">
+            <div class="row col-sm-12">
+                <div class="col-sm-6">
+                    <span class="card-text mb-4"><b>
+                            {{item.ledgerData.name}}
+                        </b>
+                    </span><br>
+                </div>
+                <div class="col-sm-2">
+                    <span class="card-text" *ngIf="!item.isCredit"><b>₹ {{item.amount}} {{item.isCredit ? 'Cr' :
+                            'Dr'}}</b></span><br>
+                </div>
+                <div class="col-sm-2">
+                    <span class="card-text" *ngIf="item.isCredit"><b>₹ {{item.amount}} {{item.isCredit ? 'Cr' :
+                            'Dr'}}</b></span><br>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-8" *ngFor="let subItem of item.subDetails">
+                    <div class="col-md-6">
+                        <div class="row ng-scope dot-line">
+                            <div class="col-md-2">{{subItem.subDetail_Type.name }}</div>
+                            <div class="col-md-6 ng-binding">{{subItem.name}}</div>
+                            <div class="col-md-4 text-right ng-binding">
+                                ₹ {{subItem.amount}} {{subItem.isCredit ? 'Cr' : 'Dr'}}
+                            </div>
+                        </div>
+                        <div class="col-md-6"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 mt-10"><b>Note : </b> {{recordData.narration}}</div>
+
+        <div class="col-sm-12 mt-2">
+            <span class="card-text" *ngIf="recordData.preparedBy"><b><label>Prepared By :</label>
+                    {{recordData.preparedBy}}</b></span>
+        </div>
+    </div> -->

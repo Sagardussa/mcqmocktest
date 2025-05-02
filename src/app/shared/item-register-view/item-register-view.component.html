@@ -1,0 +1,116 @@
+<!-- <form [formGroup]="searchForm">
+            <div class="row">
+                <ng-template #name let-r="result" let-t="term">{{ r.name }} </ng-template>
+                <div class="col-sm-2">
+                    <div class="form-label-group">
+                        <input id="fromDate" type="date" class="form-control" formControlName="fromDate"
+                            placeholder="From Date" />
+                        <label>From Date</label>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-label-group">
+                        <input id="toDate" type="date" class="form-control" formControlName="toDate"
+                            placeholder="To Date" />
+                        <label>To Date</label>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-label-group">
+                        <select name="spIds" class="form-control" formControlName="spIds">
+                            <option value=null>Select Stock Place</option>
+                            <option *ngFor="let item of stockPlaceList" [value]="item.id">
+                                {{ item.name }}
+                            </option>
+                        </select>
+                        <label>Stock Place</label>
+                    </div>
+                </div>
+                <div class="form-group col-md-2">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="isOpeningStock"
+                            formControlName="isOpeningStock">
+                        <label class="custom-control-label" for="isOpeningStock">All Stock Places</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="stockDetail"
+                            formControlName="stockDetail">
+                        <label class="custom-control-label" for="stockDetail">Stock Balance In
+                            Details</label>
+                    </div>
+                </div>
+                <div class="form-group col-md-2 mt-2">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="includeInternalMov"
+                            formControlName="includeInternalMov">
+                        <label class="custom-control-label" for="includeInternalMov">Internal Movement</label>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-success mr-1 pointer btn_white" data-toggle="tooltip"
+                        data-placement="top" ngbTooltip="Search" (click)="submitReportView()">
+                        <ng-container *ngIf="isBtnLoading">
+                            <span class="indicator-progress" [style.display]="'block'">
+                                <span class="spinner-border spinner-border-sm align-middle mr-2"></span>
+                            </span>
+                        </ng-container>
+                        <ng-container *ngIf="!isBtnLoading">
+                            <span class="indicator-label"><i class="ri-search-line "></i></span>
+                        </ng-container>
+                    </button>
+                    <button type="button" class="btn btn-light mr-1 pointer btn_white" data-toggle="tooltip"
+                        data-placement="top" ngbTooltip="Clear" (click)="clear()">
+                        <i class=" ri-eraser-line "></i>
+                    </button>
+                    <button type="button" class="btn btn-info mr-1 pointer btn_white" data-toggle="tooltip"
+                        data-placement="top" ngbTooltip="Export" (click)="submitReportExportToExcel()">
+                        <ng-container *ngIf="isExportBtnLoading">
+                            <span class="indicator-progress" [style.display]="'block'">
+                                Export
+                                <span class="spinner-border spinner-border-sm align-middle mr-2"></span>
+                            </span>
+                        </ng-container>
+                        <ng-container *ngIf="!isExportBtnLoading">
+                            <span class="indicator-label"><i class="ri-file-excel-2-line "></i></span>
+                        </ng-container>
+                    </button>
+                    <button type="button" class="btn btn-warning mr-1 pointer btn_white" data-toggle="tooltip"
+                        data-placement="top" ngbTooltip="Print" (click)="onPrintClick()">
+                        <ng-container *ngIf="isPrintBtnLoading">
+                            <span class="indicator-progress" [style.display]="'block'">
+                                Print
+                                <span class="spinner-border spinner-border-sm align-middle mr-2"></span>
+                            </span>
+                        </ng-container>
+                        <ng-container *ngIf="!isPrintBtnLoading">
+                            <span class="indicator-label"><i class="ri-printer-line "></i></span>
+                        </ng-container>
+                    </button>
+                </div>
+            </div>
+        </form> -->
+<div class="mt-1 mb-1" [ngStyle]="gridHeightWidth">
+    <ag-grid-angular [suppressColumnVirtualisation]="true" style="width: 100%; height: 100%;" class="ag-theme-alpine" [rowData]="lst"
+        (gridReady)="onGridReady($event)" [animateRows]="true">
+    </ag-grid-angular>
+</div>
+<div class="alert bg-light" role="alert">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 text-md-end">
+            <div class="float-right">
+                <button type="button" class="btn btn-sm btn-info mr-1 pointer btn_white" data-toggle="tooltip"
+                    data-placement="top" ngbTooltip="Export" (click)="exportToExcel()">
+                    <ng-container *ngIf="isExportBtnLoading">
+                        <span class="indicator-progress" [style.display]="'block'">
+                            Export
+                            <span class="spinner-border spinner-border-sm align-middle mr-2"></span>
+                        </span>
+                    </ng-container>
+                    <ng-container *ngIf="!isExportBtnLoading">
+                        <span class="indicator-label"><i class="ri-file-excel-2-line "></i></span>
+                    </ng-container>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+<form [formGroup]="form">
+    <div class="row">
+        <div class="col-md-12">
+            <div [ngClass]="{'input-group' : isCounterSaleLegder}" class="form-label-group">
+                <ng-template #rt let-r="result" let-t="term">
+                    <app-common-autocomplete-template [result]="r"
+                        templateType="ledger"></app-common-autocomplete-template>
+                </ng-template>
+                <input [ngClass]="{'border-right-0' : isCounterSaleLegder}" #typehead="ngbTypeahead"
+                    id="typeahead-basic" type="search" class="form-control" [ngbTypeahead]="ledgerSelectionFilter"
+                    [resultTemplate]="rt" [inputFormatter]="ledgerSelectionFormatter" [formControlName]="ledger"
+                    [placeholder]="label||'Ledger'" (selectItem)="onLedgerSelected($event)"
+                    [readOnly]="isLedgerDisabled"
+                    [ngClass]="isLedgerRequired && form.controls[ledger].hasError('required')?'is-invalid':''"
+                    (focus)="ledgerFocus$.next($any($event).target.value)"
+                    (click)="ledgerClick$.next($any($event).target.value)" />
+                <label for="Ledger">{{label||'Ledger'}}</label>
+                <span *ngIf="isCounterSaleLegder" class="input-group-append">
+                    <a class="input-group-text bg-transparent" (click)="openInvPrintReportPopup()"><i
+                            class="ri-information-fill ri-lg"></i></a>
+                </span>
+            </div>
+        </div>
+    </div>
+</form>

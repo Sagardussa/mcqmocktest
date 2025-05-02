@@ -1,0 +1,47 @@
+:host {
+  width: 100%;
+}
+
+.item__selection {
+  display: flex;
+  width: 100%;
+  &-name,
+  &-mobile,
+  &-address {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &-name {
+    flex: 0 0 35%;
+  }
+  &-code {
+    flex: 0 0 15%;
+  }
+  &-brand {
+    flex: 0 0 10%;
+  }
+  &-category {
+    flex: 0 0 15%;
+  }
+  &-sizes {
+    flex: 0 0 15%;
+  }
+  &-hsnNo {
+    flex: 0 0 10%;
+  }
+}
+.item__reset {
+  cursor: pointer;
+}
+
+app-item-selection {
+  
+  .dropdown-menu [id^="itemselector"]{
+      width: 800px;
+      left: auto !important;
+      right: auto !important;       
+    }    
+  
+}

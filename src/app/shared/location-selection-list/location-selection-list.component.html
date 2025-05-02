@@ -1,0 +1,211 @@
+<div class="modal-header">
+    <h5 class="modal-title mt-0">Addresses List</h5>
+    <button type="button" class="btn btn-light mr-2" aria-label="Close" (click)="cancelDialog()">
+        <i class="fa fa-times" aria-hidden="true"></i>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="card">
+        <ul ngbNav #nav="ngbNav" [activeId]="selectedTab" (navChange)="onTabChange($event)"
+            class="nav-tabs nav-tabs-custom">
+            <li [ngbNavItem]="1">
+                <a ngbNavLink>
+                    <span class="d-none d-sm-block"><i class="fa fa-home mr-1" aria-hidden="true"></i>Details</span>
+                </a>
+                <ng-template ngbNavContent>
+                    <div class="card" *ngIf="isTableVisible">
+                        <p-table #dt1 [styleClass]="selectedSize.class" [value]="recordList" selectionMode="single"
+                            dataKey="id" [tableStyle]="{'min-width': '50rem'}" [scrollable]="true"
+                            [scrollHeight]="'calc(100vh - 300px)'" (onRowSelect)="onRowSelect($event)">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th *ngIf="cityList.length">
+                                        <div class="d-flex">
+                                            <div class="flex-grow-1">
+                                                <div class="form-label-group">
+                                                    <input id="cityText" pInputText type="text"
+                                                        (input)="dt1.filter($event.target.value, 'cityText', 'contains')"
+                                                        [value]="dt1.filters['cityText']?.value" placeholder="City"
+                                                        class="form-control">
+                                                    <label for="cityText">City</label>
+                                                </div>
+                                            </div>
+                                            <span pSortableColumn="cityText"><p-sortIcon
+                                                    field="cityText"></p-sortIcon></span>
+                                        </div>
+                                    </th>
+                                    <th *ngIf="stateList.length">
+                                        <div class="d-flex">
+                                            <div class="flex-grow-1">
+                                                <div class="form-label-group">
+                                                    <input id="stateText" pInputText type="text"
+                                                        (input)="dt1.filter($event.target.value, 'stateText', 'contains')"
+                                                        [value]="dt1.filters['stateText']?.value" placeholder="State"
+                                                        class="form-control">
+                                                    <label for="stateText">State</label>
+                                                </div>
+                                            </div>
+                                            <span pSortableColumn="stateText"><p-sortIcon
+                                                    field="stateText"></p-sortIcon></span>
+                                        </div>
+                                    </th>
+                                    <th *ngIf="countryList.length">
+                                        <div class="d-flex">
+                                            <div class="flex-grow-1">
+                                                <div class="form-label-group">
+                                                    <input id="countryText" pInputText type="text"
+                                                        (input)="dt1.filter($event.target.value, 'countryText', 'contains')"
+                                                        [value]="dt1.filters['countryText']?.value"
+                                                        placeholder="Country" class="form-control">
+                                                    <label for="countryText">Country</label>
+                                                </div>
+                                            </div>
+                                            <span pSortableColumn="countryText"><p-sortIcon
+                                                    field="countryText"></p-sortIcon></span>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-item>
+                                <tr [pSelectableRow]="item">
+                                    <td *ngIf="cityList.length">
+                                        {{item.cityText}}
+                                    </td>
+                                    <td *ngIf="stateList.length">
+                                        {{item.stateText}}
+                                    </td>
+                                    <td *ngIf="countryList.length">
+                                        {{item.countryText}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="9">No address found.</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="2">
+                <a ngbNavLink>
+                    <span class="d-none d-sm-block"><i class="fa fa-home mr-1" aria-hidden="true"></i>Add</span>
+                </a>
+                <ng-template ngbNavContent>
+                    <div class="card">
+                        <div class="card-body">
+                            <form (ngSubmit)="submit()" [formGroup]="form" (keydown.enter)="$event.preventDefault()"
+                                autocomplete="off">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group col-md-6">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input"
+                                                    formControlName="isPublished" id="isPublished">
+                                                <label class="custom-control-label" for="isPublished">Is
+                                                    Published</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-label-group">
+                                                <select #name id="type" name="type" class="form-control"
+                                                    formControlName="type" [attr.disabled]="form.value.id"
+                                                    (change)="onTypeSelect()"
+                                                    [ngClass]="submitted && form.controls['type'].hasError('required')?'is-invalid':''">
+                                                    <option [ngValue]=null>
+                                                        --Select Type--
+                                                    </option>
+                                                    <option
+                                                        *ngFor="let type of appCommon.EnMastervaluetypelistForQCQuick"
+                                                        [value]="type.id">
+                                                        {{ type.text }}
+                                                    </option>
+                                                </select>
+                                                <label for="type">Type<span class="text-danger">*</span></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" *ngIf="lable">
+                                            <div class="form-label-group">
+                                                <select id="parent" name="parent" class="form-control"
+                                                    formControlName="parent" required
+                                                    [ngClass]="submitted && form.controls['parent'].hasError('required')?'is-invalid':''">
+                                                    <option [ngValue]=null>
+                                                        --Select {{lable}}--
+                                                    </option>
+                                                    <option *ngFor="let type of parentList" [value]="type.id">
+                                                        {{ type.name }}
+                                                    </option>
+                                                </select>
+                                                <label for="type">{{lable}}<span class="text-danger">*</span></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-label-group">
+                                                <input type="text" id="tt2" class="form-control" formControlName="text"
+                                                    placeholder="Text"
+                                                    [ngClass]="submitted && form.controls['text'].hasError('required')?'is-invalid':''" />
+                                                <label for="tt2">Text<span class="text-danger">*</span></label>
+                                                <div class="invalid-feedback">
+                                                    <span>This value is required.</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-label-group">
+                                                <input type="text" id="shortCode" class="form-control"
+                                                    formControlName="shortCode" placeholder="Short Code" />
+                                                <label for="shortCode">Short Code</label>
+                                                <div class="invalid-feedback">
+                                                    <span>This value is required.</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-label-group">
+                                                <textarea rows="3" class="form-control" formControlName="description"
+                                                    placeholder="Description"></textarea>
+                                                <label>Description</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mt-3">
+                                            <div class="form-group">
+                                                <div>
+                                                    <button type="submit" class="btn btn-primary btn-sm mr-2 btn-sm">
+                                                        <i class="ri-download-2-line align-middle mr-2"></i>
+                                                        <ng-container *ngIf="isBtnLoading">
+                                                            <span class="indicator-progress" [style.display]="'block'">
+                                                                Please wait...
+                                                                <span
+                                                                    class="spinner-border spinner-border-sm align-middle mr-2"></span>
+                                                            </span>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="!isBtnLoading">
+                                                            <span class="indicator-label">{{ form.value.id ? 'Update' :
+                                                                'Insert'
+                                                                }}</span>
+                                                        </ng-container>
+                                                    </button>
+                                                    <button type="button" class="btn btn-light btn-sm"
+                                                        (click)="clear()">
+                                                        <i class=" ri-eraser-line align-middle mr-2"></i> Clear
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </ng-template>
+            </li>
+        </ul>
+        <div [ngbNavOutlet]="nav"></div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="alert bg-light mt-0 mb-0" role="alert">
+        <h6 class="mt-1 font-weight-bold">Total Rows: {{ recordList.length }}</h6>
+    </div>
+</div>

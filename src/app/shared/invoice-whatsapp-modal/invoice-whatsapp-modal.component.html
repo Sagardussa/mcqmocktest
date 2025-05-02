@@ -1,0 +1,58 @@
+<div class="modal-header">
+    <h5 class="modal-title mt-0"><img class="img_hgt_wth"
+        src="assets/media/menu/whatsapp.png">WhatsApp</h5>
+    <button type="button" class="close" aria-label="Close" (click)="passBack()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <ng-container *ngIf="isPrintBtnLoading">
+        <span class="indicator-progress" [style.display]="'block'">
+            Attaching invoice please wait..
+            <span class="spinner-border spinner-border-sm align-middle mr-2"></span>
+        </span>
+    </ng-container>
+    <form [formGroup]="form" (ngSubmit)="send()" class="mb-3" autocomplete="off">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-label-group">
+                    <input type="text" class="form-control" formControlName="name" placeholder="Recipient" id="name"
+                        [ngClass]="isSubmitted && form.controls['name'].hasError('required')?'is-invalid':''"
+                        required>
+                    <label for="name">Recipient<span class="text-danger">*</span></label>
+                    <div class="invalid-feedback">
+                        <span>This value is required.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-label-group">
+                    <input type="text" class="form-control" formControlName="mobile" placeholder="Mobile"
+                        [ngClass]="isSubmitted && form.controls['mobile'].hasError('required')?'is-invalid':''"
+                        required />
+                    <label>Mobile<span class="text-danger">*</span></label>
+                    <div class="invalid-feedback" *ngIf="isSubmitted && form.get('mobile')?.hasError('required')">
+                        <span>This value is required.</span>
+                    </div>
+                    <span class="text-danger mt-1" *ngIf="(formData.mobile.touched || formData.mobile.dirty) &&  formData.mobile.invalid">
+                        Mobile No must be 10 digits
+                    </span>
+                </div>
+            </div>     
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-light btn-sm me-2" (click)="send()" [disabled]="form.invalid || isPrintBtnLoading">
+        <span class="indicator-progress" [style.display]="'block'" [hidden]="!isBtnLoading">
+            <span class="spinner-border spinner-border-sm align-middle mr-2"></span>
+        </span>
+        <span class="indicator-label" [hidden]="isBtnLoading">
+            <i class="fa fa-share-square mr-2" aria-hidden="true"></i> Send
+        </span>
+    </button>
+    <button type="button" class="btn btn-secondary btn-sm" (click)="passBack()">
+        <i class="fa fa-times mr-2" aria-hidden="true"></i>Cancel
+    </button>
+</div>
