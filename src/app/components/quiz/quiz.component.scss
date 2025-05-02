@@ -249,6 +249,31 @@ input[type="radio"] {
   background-color: #28a745;
 }
 
+/* Mobile view */
+@media screen and (max-width: 576px) {
+  // .quiz-container {
+  //   padding: 20px;
+  // }
+
+  // .nav-btn,
+  // .submit-btn,
+  // .play-again-btn {
+  //   width: 100%;
+  //   font-size: 1rem;
+  // }
+
+  // .answers {
+  //   gap: 5px;
+  // }
+
+  // .answer-label {
+  //   flex-direction: column;
+  //   align-items: flex-start;
+  // }
+}
+
+
+
 /* Responsive Design */
 @media (max-width: 600px) {
   .quiz-container {

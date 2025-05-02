@@ -1,7 +1,7 @@
-/* You can add global styles to this file, and also import other style files */
+// /* You can add global styles to this file, and also import other style files */
 
 
-// @import "~bootstrap/scss/bootstrap";
+// // @import "~bootstrap/scss/bootstrap";
 
 /* Global Styles */
 body {
@@ -53,91 +53,91 @@ body {
     color: #555;
   }
   
-  .answer-option input[type="radio"] {
-    margin-right: 10px;
-    transform: scale(1.2);
-  }
+//   .answer-option input[type="radio"] {
+//     margin-right: 10px;
+//     transform: scale(1.2);
+//   }
   
-  /* Navigation Buttons */
-  .navigation-buttons {
-    display: flex;
-    justify-content: space-between;
-  }
+//   /* Navigation Buttons */
+//   .navigation-buttons {
+//     display: flex;
+//     justify-content: space-between;
+//   }
   
-  .nav-btn,
-  .submit-btn {
-    padding: 12px 24px;
-    font-size: 1.1rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+//   .nav-btn,
+//   .submit-btn {
+//     padding: 12px 24px;
+//     font-size: 1.1rem;
+//     background-color: #007bff;
+//     color: white;
+//     border: none;
+//     border-radius: 5px;
+//     cursor: pointer;
+//   }
   
-  .nav-btn:hover,
-  .submit-btn:hover {
-    background-color: #0056b3;
-  }
+//   .nav-btn:hover,
+//   .submit-btn:hover {
+//     background-color: #0056b3;
+//   }
   
-  .nav-btn:disabled,
-  .submit-btn:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
+//   .nav-btn:disabled,
+//   .submit-btn:disabled {
+//     background-color: #ccc;
+//     cursor: not-allowed;
+//   }
   
-  /* Result Container */
-  .result-container {
-    text-align: center;
-    margin-top: 40px;
-  }
+//   /* Result Container */
+//   .result-container {
+//     text-align: center;
+//     margin-top: 40px;
+//   }
   
-  .result-container h3 {
-    font-size: 2rem;
-    color: #333;
-  }
+//   .result-container h3 {
+//     font-size: 2rem;
+//     color: #333;
+//   }
   
-  .result-container h1 {
-    font-size: 2.5rem;
-    margin: 20px 0;
-    color: #28a745;
-  }
+//   .result-container h1 {
+//     font-size: 2.5rem;
+//     margin: 20px 0;
+//     color: #28a745;
+//   }
   
-  .result-container h1:not(:last-child) {
-    color: #dc3545;
-  }
+//   .result-container h1:not(:last-child) {
+//     color: #dc3545;
+//   }
   
-  .play-again-btn {
-    background-color: #28a745;
-    color: white;
-    font-size: 1.2rem;
-    padding: 12px 25px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+//   .play-again-btn {
+//     background-color: #28a745;
+//     color: white;
+//     font-size: 1.2rem;
+//     padding: 12px 25px;
+//     border-radius: 5px;
+//     cursor: pointer;
+//   }
   
-  .play-again-btn:hover {
-    background-color: #218838;
-  }
+//   .play-again-btn:hover {
+//     background-color: #218838;
+//   }
   
-  /* Responsive Styles */
-  @media (max-width: 768px) {
-    .quiz-container {
-      padding: 10px;
-    }
+//   /* Responsive Styles */
+//   @media (max-width: 768px) {
+//     .quiz-container {
+//       padding: 10px;
+//     }
   
-    .navigation-buttons {
-      flex-direction: column;
-      gap: 10px;
-    }
+//     .navigation-buttons {
+//       flex-direction: column;
+//       gap: 10px;
+//     }
   
-    .nav-btn,
-    .submit-btn {
-      width: 100%;
-    }
+//     .nav-btn,
+//     .submit-btn {
+//       width: 100%;
+//     }
   
-    .play-again-btn {
-      width: 100%;
-    }
-  }
+//     .play-again-btn {
+//       width: 100%;
+//     }
+//   }
   
