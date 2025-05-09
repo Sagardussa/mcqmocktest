@@ -104,7 +104,7 @@ export class Quiz3Service {
       explanation: "SEBI has prescribed cut-off timings for mutual fund transactions to determine which day's NAV will be applicable, ensuring fairness to all investors."
     },
     {
-      question: "Q 19. Identify the TRUE statement/s. 1. The market liquidity can get impacted due to market related events and company factors 2. There cannot be a price impact on mutual fund units due to liquidity demands due to redemption or portfolio rebalancing",
+      question: "Q10. Identify the TRUE statement/s:\n1. The Indian inheritance laws are NOT applicable to mutual fund unit holders\n2. A Power of Attorney (POA) cannot make or change nominations in a mutual fund",
       answers: {
         A: "Only 1 is true",
         B: "Only 2 is true",
@@ -200,7 +200,7 @@ export class Quiz3Service {
       explanation: "As per the SEBI guidelines, the benchmark for debt (and balanced schemes) should be developed by research and rating agencies recommended by AMFI. CRISIL, ICICI Securities and NSE have developed various such indices."
     },
     {
-      question: "Q19. Identify the TRUE statement/s.",
+      question: "Q 19. Identify the TRUE statement/s. 1. The market liquidity can get impacted due to market related events and company factors 2. There cannot be a price impact on mutual fund units due to liquidity demands due to redemption or portfolio rebalancing",
       answers: {
         A: "Only 1 is true", // ✅ Correct
         B: "Only 2 is true",
