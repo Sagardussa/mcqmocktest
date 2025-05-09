@@ -1,0 +1,231 @@
+<!-- 
+<div class="quiz-container">
+    <h2 class="quiz-title">NISM MF 5A Mock 4 Quiz</h2>
+
+    <div *ngIf="!showResult" class="question-container">
+        <div class="question-box">
+            <div class="answers">
+                <h3>{{ questions[currentQuestionIndex].question }}</h3>
+                <div *ngFor="let entry of objectEntries(questions[currentQuestionIndex]?.answers || {})"
+                    class="answer-option">
+                    <label class="answer-label">
+                        <input type="radio" [name]="'question' + currentQuestionIndex" [value]="entry[0]"
+                            [checked]="selectedAnswers[currentQuestionIndex] === entry[0]"
+                            (change)="selectAnswer(currentQuestionIndex, entry[0])" />
+                        <span>{{ entry[0] }}: {{ entry[1] }}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div *ngIf="!showResult" class="navigation-buttons">
+        <button (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0"
+            class="nav-btn">Previous</button>
+        <button (click)="nextQuestion()" [disabled]="currentQuestionIndex === questions.length - 1"
+            class="nav-btn">Next</button>
+        <button (click)="submitQuiz()" *ngIf="currentQuestionIndex === questions.length - 1"
+            class="submit-btn">Submit</button>
+    </div>
+
+    <div *ngIf="showResult" class="result-container">
+        <h3>Your Score: {{ score }} / {{ questions.length }}</h3>
+        <h1 *ngIf="score >= questions.length / 2" class="congratulations">🎉 Congratulations!</h1>
+        <h1 *ngIf="score < questions.length / 2" class="better-luck">😓 Better Luck Next Time!</h1>
+
+
+        <div *ngFor="let question of questions; let i = index" class="question-result-box">
+            <h4>{{ question.question }}</h4>
+
+          
+            <div *ngFor="let entry of objectEntries(question.answers)">
+              <div class="option-line" 
+                   [ngClass]="{
+                     'correct': entry[0] === question.correctAnswer,
+                     'wrong': selectedAnswers[i] === entry[0] && entry[0] !== question.correctAnswer
+                   }">
+                <input type="radio" [checked]="selectedAnswers[i] === entry[0]" disabled />
+                <label>{{ entry[0] }}: {{ entry[1] }}</label>
+              </div>
+            </div>
+          
+            <div class="answer-summary">
+              <p><strong>Your Answer:</strong> 
+                <span [ngClass]="{
+                  'correct-text': selectedAnswers[i] === question.correctAnswer,
+                  'wrong-text': selectedAnswers[i] !== question.correctAnswer
+                }">
+                  {{ selectedAnswers[i] ? selectedAnswers[i] + ': ' + question.answers[selectedAnswers[i]] : 'Not Attempted' }}
+                </span>
+              </p>
+          
+             
+            </div>
+          
+            <div class="explanation-box" *ngIf="question.explanation">
+              <p><strong>EXPLANATION</strong></p>
+              <p>{{ question.explanation }}</p>
+            </div>
+          </div>
+          
+
+        <button (click)="playAgain()" class="play-again-btn">Play Again</button>
+    </div>
+</div> -->
+
+
+
+
+
+
+<!-- mcq-test.component.html -->
+<!-- <div class="exam-container">
+    <h2>Mock Test for NISM-Series-VI: Depositories Operations Certification Examination:</h2>
+  
+    <div class="timer-end">
+      <span class="timer">01:58:48</span>
+      <button class="end-btn">End Exam</button>
+    </div>
+  
+    <div class="main-content">
+      <div class="question-panel">
+        <h3>Questions</h3>
+        <div class="question-grid">
+          <div class="q-box answered">7</div>
+          <div class="q-box selected">24</div>
+          <div class="q-box review">29</div>
+        </div>
+      </div>
+  
+      <div class="question-section">
+        <div class="question-header">
+          <span>Q 24/50</span>
+          <span>Mark: 1</span>
+        </div>
+  
+        <p class="question-text">
+          State whether the given statement is true or false: “For pledging and hypothecation of securities, the pledgee and the pledgor can have their account with DPs under the different depository”.
+        </p>
+  
+        <div class="options">
+          <label><input type="radio" name="q24" /> TRUE</label>
+          <label><input type="radio" name="q24" /> FALSE</label>
+        </div>
+  
+        <div class="actions">
+          <label><input type="checkbox" /> Mark for Review</label>
+          <button class="clear-btn">CLEAR ANSWER</button>
+        </div>
+  
+        <div class="navigation">
+          <button class="nav-btn">Previous</button>
+          <button class="nav-btn">Next</button>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+
+
+  <!-- new  -->
+  <div class="exam-container" *ngIf="questions.length">
+    <h2>Mock Test for NISM-Series-VI: Depositories Operations Certification Examination</h2>
+  
+    <div class="timer-end">
+      <span class="timer">{{ remainingTime }}</span>
+      <button class="end-btn" (click)="endExam()">End Exam</button>
+    </div>
+  
+    <div class="main-content">
+      <!-- Sidebar Question Grid -->
+      <!-- <div class="question-panel">
+        <h3>Questions</h3>
+        <div class="question-grid">
+          <div 
+            *ngFor="let q of questions; let i = index"
+            class="q-box"
+            [ngClass]="{
+              'answered': selectedAnswers[i],
+              'selected': i === currentQuestionIndex,
+              'review': reviewQuestions.includes(i)
+            }"
+            (click)="jumpToQuestion(i)">
+            {{ i + 1 }}
+            {{i}}
+            2
+          </div>
+        </div>
+      </div>
+   -->
+
+   <div class="question-panel">
+    <h3>Questions</h3>
+    <div class="question-grid">
+      <div 
+        *ngFor="let q of questions; let i = index"
+        class="q-box"
+        [ngClass]="{
+          'answered': selectedAnswers[i],
+          'selected': i === currentQuestionIndex,
+          'review': reviewQuestions.includes(i)
+        }"
+        (click)="jumpToQuestion(i)">
+        {{ i + 1 }}
+      </div>
+    </div>
+  </div>
+  
+      <!-- Question Area -->
+      <div class="question-section">
+        <div class="question-header">
+          <span>Q {{ currentQuestionIndex + 1 }}/{{ questions.length }}</span>
+          <span>Mark: 1</span>
+        </div>
+  
+        <p class="question-text">
+          {{ questions[currentQuestionIndex].question }}
+        </p>
+
+        <div *ngFor="let entry of objectEntries(questions[currentQuestionIndex]?.answers || {})"
+        class="answer-option">
+        <label class="answer-label">
+            <input type="radio" [name]="'question' + currentQuestionIndex" [value]="entry[0]"
+                [checked]="selectedAnswers[currentQuestionIndex] === entry[0]"
+                (change)="selectAnswer(currentQuestionIndex, entry[0])" />
+            <span>{{ entry[0] }}: {{ entry[1] }}</span>
+        </label>
+    </div>
+  
+        <!-- <div class="options">
+          <label *ngFor="let entry of objectEntries(questions[currentQuestionIndex].answers)">
+            <input 
+              type="radio" 
+              [name]="'q' + currentQuestionIndex"
+              [value]="entry[0]"
+              [checked]="selectedAnswers[currentQuestionIndex] === entry[0]"
+              (change)="selectAnswer(currentQuestionIndex, entry[0])" />
+            {{ entry[1] }}
+          </label>
+        </div> -->
+  
+        <div class="actions">
+          <label>
+            <input type="checkbox" 
+                   [checked]="reviewQuestions.includes(currentQuestionIndex)" 
+                   (change)="toggleReview(currentQuestionIndex)" />
+            Mark for Review
+          </label>
+          <button class="clear-btn" (click)="clearAnswer(currentQuestionIndex)">CLEAR ANSWER</button>
+        </div>
+  
+        <div class="navigation">
+          <button class="nav-btn" (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0">Previous</button>
+          <button class="nav-btn" (click)="nextQuestion()" [disabled]="currentQuestionIndex === questions.length - 1">Next</button>
+          <button class="nav-btn submit-btn" *ngIf="currentQuestionIndex === questions.length - 1" (click)="submitQuiz()">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  

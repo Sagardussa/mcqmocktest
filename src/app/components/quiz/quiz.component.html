@@ -1,74 +1,51 @@
-<!-- mcq.component.html
-<h2 class="quiz-title">MCQ Quiz</h2>
+<!-- <div *ngIf="quizStarted && !showResult" class="timer" [ngClass]="{ 'warning': totalTime <= 60 }">
+    ⏳ Time Left: {{ minutes }}:{{ seconds < 10 ? '0' + seconds : seconds }} </div> -->
 
-<div *ngIf="!showResult" class="quiz-container">
-    <div class="question-container">
-        <h3>{{ questions[currentQuestionIndex].question }}</h3>
+        <div class="quiz-container">
+            <!-- Show Start Exam button before quiz starts -->
+            <h2 class="quiz-title">NISM MF 5A MOCK 1 Quiz</h2>
+            <!-- <div *ngIf="!quizStarted && !showResult">
+                <h2>Welcome to the Mock1 Test</h2>
+                <button (click)="startQuiz()" class="play-again-btn">Start Exam</button>
+            </div> -->
 
-        <div *ngFor="let entry of objectEntries(questions[currentQuestionIndex]?.answers || {})" class="answer-option">
-            <label>
-                <input type="radio" [name]="'question' + currentQuestionIndex" [value]="entry[0]"
-                    [checked]="selectedAnswers[currentQuestionIndex] === entry[0]"
-                    (change)="selectAnswer(currentQuestionIndex, entry[0])" />
-                {{ entry[0] }}: {{ entry[1] }}
-            </label>
-        </div>
-    </div>
+            <!-- Question Section -->
+            <!-- <div *ngIf="quizStarted && !showResult" class="question-container"> -->
+                <div *ngIf="!showResult" class="question-container">
 
-    <div class="navigation-buttons">
-        <button (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0" class="nav-btn">Previous</button>
-        <button (click)="nextQuestion()" [disabled]="currentQuestionIndex === questions.length - 1"
-            class="nav-btn">Next</button>
-        <button (click)="submitQuiz()" *ngIf="currentQuestionIndex === questions.length - 1"
-            class="submit-btn">Submit</button>
-    </div>
-</div>
+                <div class="question-box">
+                    <div class="answers">
+                        <h3>{{ questions[currentQuestionIndex].question }}</h3>
+                        <div *ngFor="let entry of objectEntries(questions[currentQuestionIndex]?.answers || {})"
+                            class="answer-option">
+                            <label class="answer-label">
+                                <input type="radio" [name]="'question' + currentQuestionIndex" [value]="entry[0]"
+                                    [checked]="selectedAnswers[currentQuestionIndex] === entry[0]"
+                                    (change)="selectAnswer(currentQuestionIndex, entry[0])" />
+                                <span>{{ entry[0] }}: {{ entry[1] }}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
 
-<div *ngIf="showResult" class="result-container">
-    <h3>Your Score: {{ score }} / {{ questions.length }}</h3>
-    <h1 *ngIf="score >= questions.length / 2">🎉 Congratulations!</h1>
-    <h1 *ngIf="score < questions.length / 2">😓 Better Luck Next Time!</h1>
-    <button (click)="playAgain()" class="play-again-btn">Play Again</button>
-</div> -->
-
-
-<!-- mcq-test.component.html -->
-<div class="quiz-container">
-    <h2 class="quiz-title">NISM MOCK 1 Quiz</h2>
-
-    <!-- Question Section -->
-    <div *ngIf="!showResult" class="question-container">
-        <div class="question-box">
-            <div class="answers">
-                <h3>{{ questions[currentQuestionIndex].question }}</h3>
-                <div *ngFor="let entry of objectEntries(questions[currentQuestionIndex]?.answers || {})"
-                    class="answer-option">
-                    <label class="answer-label">
-                        <input type="radio" [name]="'question' + currentQuestionIndex" [value]="entry[0]"
-                            [checked]="selectedAnswers[currentQuestionIndex] === entry[0]"
-                            (change)="selectAnswer(currentQuestionIndex, entry[0])" />
-                        <span>{{ entry[0] }}: {{ entry[1] }}</span>
-                    </label>
+                <!-- Navigation Buttons -->
+                <div class="navigation-buttons">
+                    <button (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0"
+                        class="nav-btn">Previous</button>
+                    <button (click)="nextQuestion()" [disabled]="currentQuestionIndex === questions.length - 1"
+                        class="nav-btn">Next</button>
+                    <button (click)="submitQuiz()" *ngIf="currentQuestionIndex === questions.length - 1"
+                        class="submit-btn">Submit</button>
                 </div>
             </div>
-        </div>
 
-        <!-- Navigation Buttons -->
-        <div class="navigation-buttons">
-            <button (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0"
-                class="nav-btn">Previous</button>
-            <button (click)="nextQuestion()" [disabled]="currentQuestionIndex === questions.length - 1"
-                class="nav-btn">Next</button>
-            <button (click)="submitQuiz()" *ngIf="currentQuestionIndex === questions.length - 1"
-                class="submit-btn">Submit</button>
+            <!-- Result Section -->
+            <div *ngIf="showResult" class="result-container">
+                <h3>Your Score: {{ score }} / {{ questions.length }}</h3>
+                <h1 *ngIf="score >= questions.length / 2" class="congratulations">🎉 Congratulations!</h1>
+                <h1 *ngIf="score < questions.length / 2" class="better-luck">😓 Better Luck Next Time!</h1>
+                <button (click)="playAgain()" class="play-again-btn">Play Again</button>
+                <!-- Add the Download PDF button -->
+                <!-- <button (click)="downloadPdf()" class="download-pdf-btn">Download PDF</button> -->
+            </div>
         </div>
-    </div>
-
-    <!-- Result Section -->
-    <div *ngIf="showResult" class="result-container">
-        <h3>Your Score: {{ score }} / {{ questions.length }}</h3>
-        <h1 *ngIf="score >= questions.length / 2" class="congratulations">🎉 Congratulations!</h1>
-        <h1 *ngIf="score < questions.length / 2" class="better-luck">😓 Better Luck Next Time!</h1>
-        <button (click)="playAgain()" class="play-again-btn">Play Again</button>
-    </div>
-</div>

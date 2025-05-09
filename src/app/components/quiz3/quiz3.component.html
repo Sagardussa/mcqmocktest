@@ -1,0 +1,116 @@
+
+<div class="quiz-container">
+    <h2 class="quiz-title">NISM MF 5A {{mockTitle}} Quiz</h2>
+
+    <!-- Question Section -->
+    <div *ngIf="!showResult" class="question-container">
+        <div class="question-box">
+            <div class="answers">
+                <h3>{{ questions[currentQuestionIndex].question }}</h3>
+                <div *ngFor="let entry of objectEntries(questions[currentQuestionIndex]?.answers || {})"
+                    class="answer-option">
+                    <label class="answer-label">
+                        <input type="radio" [name]="'question' + currentQuestionIndex" [value]="entry[0]"
+                            [checked]="selectedAnswers[currentQuestionIndex] === entry[0]"
+                            (change)="selectAnswer(currentQuestionIndex, entry[0])" />
+                        <span>{{ entry[0] }}: {{ entry[1] }}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div *ngIf="!showResult" class="navigation-buttons">
+        <button (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0"
+            class="nav-btn">Previous</button>
+        <button (click)="nextQuestion()" [disabled]="currentQuestionIndex === questions.length - 1"
+            class="nav-btn">Next</button>
+        <button (click)="submitQuiz()" *ngIf="currentQuestionIndex === questions.length - 1"
+            class="submit-btn">Submit</button>
+    </div>
+
+    <!-- Result Section -->
+    <div *ngIf="showResult" class="result-container">
+        <h3>Your Score: {{ score }} / {{ questions.length }}</h3>
+        <h1 *ngIf="score >= questions.length / 2" class="congratulations">🎉 Congratulations!</h1>
+        <h1 *ngIf="score < questions.length / 2" class="better-luck">😓 Better Luck Next Time!</h1>
+
+                 <!-- Display all questions with correct/incorrect answers -->
+        <!-- <div *ngFor="let question of questions; let i = index" class="question-result">
+            <h4>{{ question.question }}</h4>
+
+            <div class="user-answer">
+                <strong>Your Answer:</strong>
+                <span [ngClass]="{
+                    'selected-answer': selectedAnswers[i] === question.correctAnswer,
+                    'incorrect-answer': selectedAnswers[i] !== question.correctAnswer
+                }">
+                    {{ selectedAnswers[i] }}: 
+                    {{ question.answers[selectedAnswers[i]] ?  question.answers[selectedAnswers[i]] : 'NA' }}
+                </span>
+            </div>
+
+            <div class="answer-options">
+                <p *ngFor="let entry of objectEntries(question.answers)">
+                    <span [ngClass]="{
+                        'green': entry[0] === question.correctAnswer,
+                        'red': entry[0] !== question.correctAnswer
+                    }">
+                        {{ entry[0] }}: {{ entry[1] }}
+                    </span>
+                </p>
+            </div>
+
+            <div *ngIf="selectedAnswers[i] !== question.correctAnswer" class="explanation">
+                <strong>Explanation:</strong> {{ question.explanation }}
+            </div>
+        </div> -->
+
+        <div *ngFor="let question of questions; let i = index" class="question-result-box">
+            <h4>{{ question.question }}</h4>
+            <!-- <h4>Q{{ i + 1 }}. {{ question.question }}</h4> -->
+
+          
+            <!-- List of options -->
+            <div *ngFor="let entry of objectEntries(question.answers)">
+              <div class="option-line" 
+                   [ngClass]="{
+                     'correct': entry[0] === question.correctAnswer,
+                     'wrong': selectedAnswers[i] === entry[0] && entry[0] !== question.correctAnswer
+                   }">
+                <input type="radio" [checked]="selectedAnswers[i] === entry[0]" disabled />
+                <label>{{ entry[0] }}: {{ entry[1] }}</label>
+              </div>
+            </div>
+          
+            <!-- Show selected answer -->
+            <div class="answer-summary">
+              <p><strong>Your Answer:</strong> 
+                <span [ngClass]="{
+                  'correct-text': selectedAnswers[i] === question.correctAnswer,
+                  'wrong-text': selectedAnswers[i] !== question.correctAnswer
+                }">
+                  {{ selectedAnswers[i] ? selectedAnswers[i] + ': ' + question.answers[selectedAnswers[i]] : 'Not Attempted' }}
+                </span>
+              </p>
+          
+              <!-- <p><strong>Correct Answer:</strong> 
+                <span class="correct-text">
+                  {{ question.correctAnswer }}: {{ question.answers[question.correctAnswer] }}
+                </span>
+              </p> -->
+            </div>
+          
+            <!-- Explanation -->
+            <div class="explanation-box" *ngIf="question.explanation">
+              <p><strong>EXPLANATION</strong></p>
+              <p>{{ question.explanation }}</p>
+            </div>
+          </div>
+          
+
+        <button (click)="playAgain()" class="play-again-btn">Play Again</button>
+    </div>
+</div>

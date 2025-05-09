@@ -10,6 +10,8 @@ import { LayoutComponent } from './layout/layout/layout.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { QuizComponent } from './components/quiz/quiz.component';
 import { Quiz2Component } from './components/quiz2/quiz2.component';
+import { Quiz3Component } from './components/quiz3/quiz3.component';
+import { Quiz4Component } from './components/quiz4/quiz4.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { Quiz2Component } from './components/quiz2/quiz2.component';
     Quiz2Component,
     HeaderComponent,
     LayoutComponent,
-    FooterComponent
+    FooterComponent,
+    Quiz3Component,
+    Quiz4Component
   ],
   imports: [
     BrowserModule,
